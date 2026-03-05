@@ -3,7 +3,8 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('inicial');
+    $nome = "Anderson";
+    return view('inicial', ["nome" => $nome]);
 });
 
 Route::get('/sobre', function () {
