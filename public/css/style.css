@@ -59,3 +59,55 @@ header ul li a:hover {
     color: #f2f2f2;
     transition: 0.3s;
 }
+
+.form-register {
+    width: 20dvw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /*border: 1px solid #D3D3D3;*/
+}
+
+.input-label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 24px;
+    width: 100%;
+}
+
+.input-label input {
+    padding-inline: 16px;
+    padding-block: 8px;
+    font-size: 16px;
+    line-height: 1.5;
+    letter-spacing: 0.02em;
+    border-radius: 4px;
+    border: 2px solid transparent;
+    background-color: #D3D3D3;
+}
+
+.input-label input:focus {
+    outline: none;
+    border: 2px solid #FB7200;
+    color: #FB7200;
+}
+
+.input-label input:focus::placeholder {
+    color: #FB7200;
+}
+
+.btn-primary {
+    width: 20dvw;
+    padding-block: 8px;
+    padding-inline: 16px;
+    background-color: #FB7200;
+    border: none;
+    margin-top: 32px;
+    font-weight: 500;
+    font-weight: 20px;
+    letter-spacing: 0.02em;
+    line-height: 1.5;
+    color: #f2f2f2;
+    border-radius: 4px;
+}

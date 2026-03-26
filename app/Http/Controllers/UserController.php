@@ -4,35 +4,38 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
     public function store(Request $request) {
-        //Criando um objeto Usuário
-        $user = new User();
 
-        //Definindo os atributos do usuário
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = $request->password;
-
+        // validação primeiro
         $request->validate([
-            'name' => 'required|String|max:255',
-            'email' => "required|email|unique:users ,email",
-            'password' => "required|min:6|confirmed"
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:6|confirmed'
         ],[
             'required' => 'O campo :attribute é obrigatório',
-            'required' => 'Digite um :attribute válido',
-            'min' => 'O campo :attribute deve ter menos :min caracteres',
+            'email' => 'Digite um :attribute válido',
+            'min' => 'O campo :attribute deve ter no mínimo :min caracteres',
             'confirmed' => 'As senhas não coincidem'
         ],[
             'name' => 'nome',
             'email' => 'e-mail',
             'password' => 'senha'
         ]);
-        //Salvando no BD
+
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+
+        // senha criptografada
+        $user->password = Hash::make($request->password);
+
+        // salvar
         $user->save();
 
         return redirect("/");
-    }//fim do store
+    }
 }
