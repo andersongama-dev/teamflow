@@ -36,6 +36,8 @@ class UserController extends Controller
         // salvar
         $user->save();
 
-        return redirect("/");
+        return response()->json([
+            'user_email' => $user->email
+        ]);
     }
 }
