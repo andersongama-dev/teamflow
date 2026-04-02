@@ -22,4 +22,4 @@ Route::get('/sign-up', function () {
     return view('Auth/signUp');
 });
 
-Route::post('/sign-up', [UserController::class, 'store']);
+//Route::post('/sign-up', [UserController::class, 'store']);
