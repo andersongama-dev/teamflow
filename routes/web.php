@@ -23,3 +23,11 @@ Route::get('/sign-up', function () {
 });
 
 //Route::post('/sign-up', [UserController::class, 'store']);
+
+Route::get('/material', function() {
+    return view('materials/table');
+});
+
+Route::post('/material', function() {
+    return view('materials/table');
+});
