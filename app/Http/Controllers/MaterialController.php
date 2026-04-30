@@ -14,6 +14,10 @@ class MaterialController extends Controller
     // Cria o metodo de salvar o material no banco de dados
     public function store(Request $request) {
         $material = new Material();
+
+        $material->user_id = 1;
+        $material->file_url = 'link url';
+
         $material->save();
     }
 }
