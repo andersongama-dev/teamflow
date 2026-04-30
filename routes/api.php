@@ -8,4 +8,5 @@ use Illuminate\Support\Facades\Route;
 Route::post('/sign-up', [UserController::class, 'store']);
 
 // Routes material
-Route::post('material', [MaterialController::class, 'store']);
+Route::get('/materials/new', [MaterialController::class, 'create']);
+Route::post('/materials/new', [MaterialController::class, 'store']);
