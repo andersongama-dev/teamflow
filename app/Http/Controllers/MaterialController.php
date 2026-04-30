@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class MaterialController extends Controller
 {
     public function create() {
-        return view("materials/");
+        return view("materials/form");
     }
 
     // Cria o metodo de salvar o material no banco de dados
