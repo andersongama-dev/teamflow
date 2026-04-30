@@ -17,7 +17,14 @@ class MaterialController extends Controller
 
         $material->user_id = 1;
         $material->file_url = 'link url';
+        $material->description = $request->description;
 
         $material->save();
+
+        return response()->json([
+            "user_id" => $material->user_id,
+            "file_url" => $material->file_url,
+            "description" => $material->description
+        ]);
     }
 }
