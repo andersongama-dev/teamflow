@@ -8,4 +8,11 @@ class Material extends Model
 {
     // Vincula o modelo com a tabela materials
     protected $table = "materials";
+
+    protected $fillable = [
+        'user_id',
+        'file_url',
+        'name',
+        'description',
+    ];
 }
