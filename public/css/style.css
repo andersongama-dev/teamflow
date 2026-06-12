@@ -20,7 +20,7 @@ header p {
     font-weight: 600;
     letter-spacing: 1;
     line-height: 1.2%;
-    color: #FB7200;
+    color: #fb7200;
 }
 
 header ul {
@@ -35,13 +35,12 @@ header ul li a {
 }
 
 header ul li a:hover {
-    color: #FB7200;
-    transition: 0.3S;
+    color: #fb7200;
+    transition: 0.3s;
 }
 
-
 .btn-login {
-    background-color: #FB7200;
+    background-color: #fb7200;
     border: none;
     color: #f2f2f2;
     padding-block: 8px;
@@ -84,24 +83,24 @@ header ul li a:hover {
     letter-spacing: 0.02em;
     border-radius: 4px;
     border: 2px solid transparent;
-    background-color: #D3D3D3;
+    background-color: #d3d3d3;
 }
 
 .input-label input:focus {
     outline: none;
-    border: 2px solid #FB7200;
-    color: #FB7200;
+    border: 2px solid #fb7200;
+    color: #fb7200;
 }
 
 .input-label input:focus::placeholder {
-    color: #FB7200;
+    color: #fb7200;
 }
 
 .btn-primary {
     width: 20dvw;
     padding-block: 8px;
     padding-inline: 16px;
-    background-color: #FB7200;
+    background-color: #fb7200;
     border: none;
     margin-top: 32px;
     font-weight: 500;

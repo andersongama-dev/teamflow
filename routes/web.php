@@ -4,9 +4,8 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
-Route::get('/', function (Request $request) {
-    $nome = $request -> nome ?? "Gabriel";
-    return view('inicial', ["nome" => $nome]);
+Route::get('/', function () {
+    return view('inicial');
 });
 
 Route::post('/', function(Request $request){
@@ -15,7 +14,7 @@ Route::post('/', function(Request $request){
 });
 
 Route::get('/sobre', function () {
-    return view('sobre');
+    return view('about');
 });
 
 Route::get('/sign-up', function () {
@@ -24,10 +23,10 @@ Route::get('/sign-up', function () {
 
 //Route::post('/sign-up', [UserController::class, 'store']);
 
-Route::get('/material', function() {
-    return view('materials/table');
+Route::get('/materiais', function() {
+    return view('App/materials/table');
 });
 
-Route::post('/material', function() {
+Route::post('/materiais', function() {
     return view('materials/table');
 });
