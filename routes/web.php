@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\TeacherController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
@@ -35,10 +36,16 @@ Route::middleware('auth')->group(function () {
         return view('Auth.accountType');
     })->name('accountType');
 
-    Route::post('/account-type', [UserController::class, 'selectRole'])
-        ->name('accountType.store');
+    Route::get('/teachers-complete-profile', function () {
+        return view('Auth.teacher');
+    })->name('teachers-complete-profile');
+
+    Route::post('/account-type', [UserController::class, 'selectRole'])->name('accountType.store');
 
     Route::post('/logout', [UserController::class, 'logout'])->middleware('auth')->name('logout');
+
+    Route::post('/teachers-complete-profile', [TeacherController::class, 'store'])
+    ->name('teachers-complete-profile.store');
 
     Route::get('/materiais', function () {
         return view('App.materials.table');

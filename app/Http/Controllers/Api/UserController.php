@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Teacher;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -69,7 +70,6 @@ class UserController extends Controller
 
     public function selectRole(Request $request)
     {
-        
         $request->validate([
             'role' => ['required']
         ]);
@@ -77,6 +77,10 @@ class UserController extends Controller
         $user = auth()->user();
 
         $user->syncRoles([$request->role]);
+
+        if ($request->role === 'Professor') {
+            return redirect('/teachers-complete-profile');
+        }
 
         return redirect()->route('classes');
     }
