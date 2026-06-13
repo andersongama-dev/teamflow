@@ -23,16 +23,26 @@ Route::get('/sign-up', function () {
 
 Route::get('/sign-in', function () {
     return view('Auth/signIn');
-});
+})->name('login');
 
 Route::post('/sign-up', [UserController::class, 'store']);
 
 Route::post('/sign-in', [UserController::class, 'login']);
 
-Route::get('/materiais', function() {
-    return view('App/materials/table');
-})->name('classes');
+Route::middleware('auth')->group(function () {
+    Route::get('/materiais', function () {
+        return view('App.materials.table');
+    })->middleware(['auth', 'permission:subjects.*'])->name('classes');
 
-Route::post('/materiais', function() {
+    Route::get('/teste-admin', function () {
+        return 'Você passou na autorização!';
+    })->middleware(['auth', 'permission:users.delete']);
+
+    Route::get('/debug', function () {
+        return auth()->user()->getAllPermissions()->pluck('name');
+    })->middleware('auth');
+
+    Route::post('/materiais', function() {
     return view('materials/table');
+});
 });
