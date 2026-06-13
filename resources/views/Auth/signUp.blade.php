@@ -1,59 +1,63 @@
 @extends('layout')
 
 @section('container')
-<div class="container min-vh-100 d-flex align-items-center justify-content-center">
-  
-  <div>
-    <div>
+    <div class="flex justify-center items-center h-dvh">
+        <flux:card class="space-y-6 w-96">
+            <div>
+                <flux:heading size="lg">Criar conta</flux:heading>
+                <flux:text class="mt-2">
+                    Preencha os dados para se cadastrar.
+                </flux:text>
+            </div>
 
-      <h4 class="text-center mb-4">Criar Conta</h4>
+            <form action="{{ url('sign-up') }}" method="POST">
+                @csrf
 
-      @if ($errors->any())
-        <div class="alert alert-danger">
-          <ul>
-            @foreach ($errors->all() as $error)
-              <li>{{$error}}</li>
-            @endforeach
-          </ul>
-        </div>
-      @endif
+                <div class="space-y-6">
+                    <flux:input label="Nome" type="text" name="name" value="{{ old('name') }}"
+                        placeholder="Seu nome" />
 
-      <form action="/sign-up" method="POST" class="form-register">
-        @csrf
-        <div class="input-label">
-          <label for="nome" class="">Nome</label>
-          <input type="text" class="" name="name" id="name" placeholder="Seu nome completo" required>
-        </div>
+                    <flux:error name="name" />
 
-        <div class="input-label">
-          <label for="email" class="">Email</label>
-          <input type="email" class="" name="email" id="email" placeholder="seuemail@exemplo.com" required>
-        </div>
+                    <flux:input label="E-mail" type="email" name="email" value="{{ old('email') }}"
+                        placeholder="Seu endereço de e-mail" />
 
-        <div class="input-label">
-          <label for="senha" class="">Senha</label>
-          <input type="password" class="" name="password" id="password" placeholder="Digite sua senha" required>
-        </div>
 
-        <div class="input-label">
-          <label for="confirmarSenha" class="">Repita sua senha</label>
-          <input type="password" class="" name="password_confirmation" id="confirmarSenha" placeholder="Digite novamente" required>
-        </div>
+                    <flux:field>
+                        <flux:label>Senha</flux:label>
 
-        <div>
-          <button type="submit" class="btn-primary">
-            Criar Conta
-          </button>
-        </div>
+                        <flux:input type="password" name="password" placeholder="Sua senha">
+                            <x-slot name="iconTrailing">
+                                <flux:button size="sm" variant="subtle" icon="eye" class="-mr-1" type="button" />
+                            </x-slot>
+                        </flux:input>
 
-      </form>
+                        <flux:error name="password" />
+                    </flux:field>
 
-      <p class="">
-        Já possui conta? <a href="#">Entrar</a>
-      </p>
+                    <flux:field>
+                        <flux:label>Confirmar senha</flux:label>
 
+                        <flux:input type="password" name="password_confirmation" placeholder="Confirme sua senha">
+                            <x-slot name="iconTrailing">
+                                <flux:button size="sm" variant="subtle" icon="eye" class="-mr-1" type="button" />
+                            </x-slot>
+                        </flux:input>
+                    </flux:field>
+                </div>
+
+                <div class="space-y-2 mt-6">
+                    <flux:button type="submit" variant="primary" color="orange" class="w-full cursor-pointer">
+                        Registrar-se
+                    </flux:button>
+
+                    <a href="/sign-in" class="block">
+                        <flux:button type="button" variant="ghost" class="w-full cursor-pointer">
+                            Já tenho uma conta
+                        </flux:button>
+                    </a>
+                </div>
+            </form>
+        </flux:card>
     </div>
-  </div>
-
-</div>
 @endsection

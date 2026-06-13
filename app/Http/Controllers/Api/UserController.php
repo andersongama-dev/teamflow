@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Teacher;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -37,8 +39,64 @@ class UserController extends Controller
         // salvar
         $user->save();
 
-        return response()->json([
-            'user_email' => $user->email
+        Auth::login($user);
+
+        $request->session()->regenerate();
+
+        return redirect()->route('accountType')->with('success', 'Usuário cadastrado com sucesso!');
+    }
+
+    public function login(Request $request)
+    {
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
         ]);
+
+        if (Auth::attempt($credentials)) {
+
+            $request->session()->regenerate();
+            if (auth()->user()->roles()->count() === 0) {
+                return redirect()->route('accountType');
+            }
+
+            return redirect()->route('classes');
+        }
+
+        return back()->withErrors([
+            'email' => 'E-mail ou senha inválidos.',
+        ])->onlyInput('email');
+    }
+
+    public function selectRole(Request $request)
+    {
+        $request->validate([
+            'role' => ['required']
+        ]);
+
+        $user = auth()->user();
+
+        $user->syncRoles([$request->role]);
+
+        if ($request->role === 'Professor') {
+            return redirect('/teachers-complete-profile');
+        }
+
+        if ($request->role === 'Aluno') {
+            return redirect('/students-complete-profile');
+        }
+
+        return redirect()->route('classes');
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect('/sign-in');
     }
 }
