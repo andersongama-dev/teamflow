@@ -44,4 +44,23 @@ class UserController extends Controller
 
         return redirect()->route('classes')->with('success', 'Usuário cadastrado com sucesso!');
     }
+
+    public function login(Request $request)
+    {
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
+
+        if (Auth::attempt($credentials)) {
+
+            $request->session()->regenerate();
+
+            return redirect()->route('classes');
+        }
+
+        return back()->withErrors([
+            'email' => 'E-mail ou senha inválidos.',
+        ])->onlyInput('email');
+    }
 }

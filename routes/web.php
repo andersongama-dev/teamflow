@@ -21,7 +21,13 @@ Route::get('/sign-up', function () {
     return view('Auth/signUp');
 });
 
+Route::get('/sign-in', function () {
+    return view('Auth/signIn');
+});
+
 Route::post('/sign-up', [UserController::class, 'store']);
+
+Route::post('/sign-in', [UserController::class, 'login']);
 
 Route::get('/materiais', function() {
     return view('App/materials/table');
