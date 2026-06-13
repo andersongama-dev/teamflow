@@ -25,7 +25,7 @@
                 class="in-data-flux-sidebar-on-desktop:not-in-data-flux-sidebar-collapsed-desktop:-mr-2" />
         </flux:sidebar.header>
         <flux:sidebar.nav>
-            <flux:sidebar.item icon="chart-pie" href="/dashboard">Dashboard</flux:sidebar.item>
+            <flux:sidebar.item icon="chart-pie" href="/sign-up">Dashboard</flux:sidebar.item>
             <flux:sidebar.item icon="academic-cap" href="/classes">Minhas turmas</flux:sidebar.item>
             <flux:sidebar.item icon="book-open" href="/subjects">Matérias</flux:sidebar.item>
             <flux:sidebar.item icon="arrow-top-right-on-square" href="/notes">Lançar Notas</flux:sidebar.item>
@@ -49,10 +49,10 @@
         <flux:dropdown position="top" align="start" class="max-lg:hidden">
             <flux:sidebar.profile
                 avatar="https://4.bp.blogspot.com/-83HGO7a2KV4/U6yEBTghSeI/AAAAAAAB9Ys/dslH1eKaueY/s1600/fernandinho.jpg"
-                name="Fernandinho" />
+                name="{{ auth()->user()->name }}" />
             <flux:menu>
                 <flux:menu.radio.group>
-                    <flux:menu.radio checked>Fernandinho</flux:menu.radio>
+                    <flux:menu.radio checked>{{ auth()->user()->name }}</flux:menu.radio>
                     <flux:menu.radio>Professor do TeamFlow</flux:menu.radio>
                 </flux:menu.radio.group>
                 <flux:menu.separator />

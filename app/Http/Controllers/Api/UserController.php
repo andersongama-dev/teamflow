@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -37,8 +38,10 @@ class UserController extends Controller
         // salvar
         $user->save();
 
-        return response()->json([
-            'user_email' => $user->email
-        ]);
+        Auth::login($user);
+
+        $request->session()->regenerate();
+
+        return redirect()->route('classes')->with('success', 'Usuário cadastrado com sucesso!');
     }
 }

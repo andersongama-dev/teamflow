@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
@@ -21,11 +21,11 @@ Route::get('/sign-up', function () {
     return view('Auth/signUp');
 });
 
-//Route::post('/sign-up', [UserController::class, 'store']);
+Route::post('/sign-up', [UserController::class, 'store']);
 
 Route::get('/materiais', function() {
     return view('App/materials/table');
-});
+})->name('classes');
 
 Route::post('/materiais', function() {
     return view('materials/table');
