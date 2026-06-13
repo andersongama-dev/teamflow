@@ -24,23 +24,71 @@
             <flux:sidebar.collapse
                 class="in-data-flux-sidebar-on-desktop:not-in-data-flux-sidebar-collapsed-desktop:-mr-2" />
         </flux:sidebar.header>
-        <flux:sidebar.nav>
-            <flux:sidebar.item icon="chart-pie" href="/sign-up">Dashboard</flux:sidebar.item>
-            <flux:sidebar.item icon="academic-cap" href="/classes">Minhas turmas</flux:sidebar.item>
-            <flux:sidebar.item icon="book-open" href="/subjects">Matérias</flux:sidebar.item>
-            <flux:sidebar.item icon="arrow-top-right-on-square" href="/notes">Lançar Notas</flux:sidebar.item>
-            <flux:sidebar.item icon="calendar-days" href="/frequency">Frequência</flux:sidebar.item>
-            <flux:sidebar.item icon="document-text" href="/reports">Relatórios</flux:sidebar.item>
-            <?php
-            /*
-            <flux:sidebar.group expandable icon="star" heading="Favorites" class="grid">
-                <flux:sidebar.item href="#">Marketing site</flux:sidebar.item>
-                <flux:sidebar.item href="#">Android app</flux:sidebar.item>
-                <flux:sidebar.item href="#">Brand guidelines</flux:sidebar.item>
-            </flux:sidebar.group>
-            */
-            ?>
-        </flux:sidebar.nav>
+
+        @can('dashboard.admin')
+            <flux:sidebar.item icon="chart-pie" href="/dashboard" :current="request()->is('dashboard*')">
+
+                Dashboard Admin
+
+            </flux:sidebar.item>
+        @endcan
+
+        @can('dashboard.teacher')
+            <flux:sidebar.item icon="chart-pie" href="/dashboard/teacher" :current="request()->is('dashboard*')">
+
+                Dashboard Teacher
+
+            </flux:sidebar.item>
+        @endcan
+
+        @can('dashboard.student')
+            <flux:sidebar.item icon="chart-pie" href="/dashboard/student" :current="request()->is('dashboard*')">
+
+                Dashboard Aluno
+
+            </flux:sidebar.item>
+        @endcan
+
+        @can('subjects.*')
+            <flux:sidebar.item icon="book-open" href="/subjects" :current="request()->is('subjects*')">
+
+                Matérias
+
+            </flux:sidebar.item>
+        @endcan
+
+        @can('classes.*')
+            <flux:sidebar.item icon="academic-cap" href="/classes" :current="request()->is('classes*')">
+
+                Turmas
+
+            </flux:sidebar.item>
+        @endcan
+
+        @can('grades.create')
+            <flux:sidebar.item icon="arrow-top-right-on-square" href="/notes" :current="request()->is('notes*')">
+
+                Lançar Notas
+
+            </flux:sidebar.item>
+        @endcan
+
+        @can('reports.view')
+            <flux:sidebar.item icon="document-text" href="/reports" :current="request()->is('reports*')">
+
+                Relatórios
+
+            </flux:sidebar.item>
+        @endcan
+
+        @can('users.*')
+            <flux:sidebar.item icon="users" href="/users" :current="request()->is('users*')">
+
+                Usuários
+
+            </flux:sidebar.item>
+        @endcan
+
         <flux:sidebar.spacer />
         <flux:sidebar.nav>
             <flux:sidebar.item icon="cog-6-tooth" href="#">Settings</flux:sidebar.item>
