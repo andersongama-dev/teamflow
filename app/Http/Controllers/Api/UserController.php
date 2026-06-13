@@ -82,6 +82,10 @@ class UserController extends Controller
             return redirect('/teachers-complete-profile');
         }
 
+        if ($request->role === 'Aluno') {
+            return redirect('/students-complete-profile');
+        }
+
         return redirect()->route('classes');
     }
 

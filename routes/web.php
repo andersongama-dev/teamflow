@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\TeacherController;
+use App\Http\Controllers\Api\StudentController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
@@ -46,6 +47,12 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/teachers-complete-profile', [TeacherController::class, 'store'])
     ->name('teachers-complete-profile.store');
+
+    Route::get('/students-complete-profile', function () {
+        return view('Auth.student');
+    })->name('students.profile');
+
+    Route::post('/students-complete-profile', [StudentController::class, 'store'])->name('students.profile.store');
 
     Route::get('/materiais', function () {
         return view('App.materials.table');
