@@ -35,12 +35,12 @@
                 </div>
 
                 <div class="space-y-2 mt-6">
-                    <flux:button type="submit" variant="primary" color="orange" class="w-full">
+                    <flux:button type="submit" variant="primary" color="orange" class="w-full cursor-pointer">
                         Entrar
                     </flux:button>
 
                     <a href="/sign-up" class="block">
-                        <flux:button type="button" variant="ghost" class="w-full">
+                        <flux:button type="button" variant="ghost" class="w-full cursor-pointer">
                             Criar uma conta
                         </flux:button>
                     </a>
