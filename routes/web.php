@@ -30,19 +30,31 @@ Route::post('/sign-up', [UserController::class, 'store']);
 Route::post('/sign-in', [UserController::class, 'login']);
 
 Route::middleware('auth')->group(function () {
+
+    Route::get('/account-type', function () {
+        return view('Auth.accountType');
+    })->name('accountType');
+
+    Route::post('/account-type', [UserController::class, 'selectRole'])
+        ->name('accountType.store');
+
     Route::get('/materiais', function () {
         return view('App.materials.table');
-    })->middleware(['auth', 'permission:subjects.*'])->name('classes');
+    })->middleware('permission:subjects.*')
+      ->name('classes');
 
     Route::get('/teste-admin', function () {
         return 'Você passou na autorização!';
-    })->middleware(['auth', 'permission:users.delete']);
+    })->middleware('permission:users.*');
 
     Route::get('/debug', function () {
-        return auth()->user()->getAllPermissions()->pluck('name');
-    })->middleware('auth');
-
-    Route::post('/materiais', function() {
-    return view('materials/table');
+        return [
+            'roles' => auth()->user()->getRoleNames(),
+            'permissions' => auth()->user()->getAllPermissions()->pluck('name'),
+        ];
+    });
 });
+
+Route::post('/materiais', function () {
+    return view('materials.table');
 });

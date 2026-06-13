@@ -42,7 +42,7 @@ class UserController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->route('classes')->with('success', 'Usuário cadastrado com sucesso!');
+        return redirect()->route('accountType')->with('success', 'Usuário cadastrado com sucesso!');
     }
 
     public function login(Request $request)
@@ -55,6 +55,9 @@ class UserController extends Controller
         if (Auth::attempt($credentials)) {
 
             $request->session()->regenerate();
+            if (auth()->user()->roles()->count() === 0) {
+                return redirect()->route('accountType');
+            }
 
             return redirect()->route('classes');
         }
@@ -62,5 +65,19 @@ class UserController extends Controller
         return back()->withErrors([
             'email' => 'E-mail ou senha inválidos.',
         ])->onlyInput('email');
+    }
+
+    public function selectRole(Request $request)
+    {
+        
+        $request->validate([
+            'role' => ['required']
+        ]);
+
+        $user = auth()->user();
+
+        $user->syncRoles([$request->role]);
+
+        return redirect()->route('classes');
     }
 }
