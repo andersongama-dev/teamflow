@@ -38,6 +38,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/account-type', [UserController::class, 'selectRole'])
         ->name('accountType.store');
 
+    Route::post('/logout', [UserController::class, 'logout'])->middleware('auth')->name('logout');
+
     Route::get('/materiais', function () {
         return view('App.materials.table');
     })->middleware('permission:subjects.*')

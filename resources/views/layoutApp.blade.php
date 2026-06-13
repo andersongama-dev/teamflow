@@ -104,7 +104,13 @@
                     <flux:menu.radio>Professor do TeamFlow</flux:menu.radio>
                 </flux:menu.radio.group>
                 <flux:menu.separator />
-                <flux:menu.item icon="arrow-right-start-on-rectangle">Logout</flux:menu.item>
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+
+                    <flux:menu.item as="button" type="submit" icon="arrow-right-start-on-rectangle">
+                        Logout
+                    </flux:menu.item>
+                </form>
             </flux:menu>
         </flux:dropdown>
     </flux:sidebar>
@@ -119,7 +125,7 @@
                     <flux:menu.radio>Professor do TeamFlow</flux:menu.radio>
                 </flux:menu.radio.group>
                 <flux:menu.separator />
-                <flux:menu.item icon="arrow-right-start-on-rectangle">Logout</flux:menu.item>
+                <flux:menu.item icon="arrow-right-start-on-rectangle"></flux:menu.item>
             </flux:menu>
         </flux:dropdown>
     </flux:header>
