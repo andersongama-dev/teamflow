@@ -30,22 +30,16 @@ class SubjectController extends Controller
         return view('App.Subjects.index', compact('subjects'));
     }
 
-    public function create()
-    {
-        $teachers = Teacher::orderBy('id')->get();
-
-        return view('subjects.create', compact('teachers'));
-    }
-
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'teacher_id' => ['required', 'exists:teachers,id'],
             'name' => ['required', 'string', 'max:255'],
             'code' => ['required', 'string', 'max:50', 'unique:subjects,code'],
             'workload_hours' => ['required', 'integer', 'min:1'],
             'description' => ['nullable', 'string'],
         ]);
+
+        $validated['teacher_id'] = auth()->user()->teacher->id;
 
         Subject::create($validated);
 
