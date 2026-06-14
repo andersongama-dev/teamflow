@@ -2,14 +2,14 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-use App\Models\Student;
-use App\Models\Teacher;
-use App\Models\Subject;
-use App\Models\SchoolClass;
+use App\Models\Attendance;
 use App\Models\Enrollment;
 use App\Models\Grade;
-use App\Models\Attendance;
+use App\Models\SchoolClass;
+use App\Models\Student;
+use App\Models\Subject;
+use App\Models\Teacher;
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -17,13 +17,8 @@ class DatabaseSeeder extends Seeder
 {
     use WithoutModelEvents;
 
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // User::factory(10)->create();
-
         User::firstOrCreate(
             ['email' => 'test@example.com'],
             [
@@ -37,11 +32,8 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Student::factory(50)->create();
-
         Teacher::factory(10)->create();
-
         Subject::factory(20)->create();
-
         SchoolClass::factory(20)->create();
 
         $students = Student::all();
@@ -64,14 +56,16 @@ class DatabaseSeeder extends Seeder
 
         $enrollments = Enrollment::with('schoolClass')->get();
 
-        foreach ($enrollments as $enrollment) {
-            foreach ([
-                'Exam 1',
-                'Exam 2',
-                'Assignment',
-                'Final Exam'
-            ] as $assessment) {
+        $assessments = [
+            'Exam 1',
+            'Exam 2',
+            'Assignment',
+            'Final Exam',
+        ];
 
+        foreach ($enrollments as $enrollment) {
+
+            foreach ($assessments as $assessment) {
                 Grade::create([
                     'student_id' => $enrollment->student_id,
                     'school_class_id' => $enrollment->school_class_id,
@@ -81,23 +75,15 @@ class DatabaseSeeder extends Seeder
                     'assessment_date' => fake()->dateTimeBetween('-6 months', 'now'),
                 ]);
             }
-        }
 
-        $enrollments = Enrollment::all();
-
-        foreach ($enrollments as $enrollment) {
             for ($i = 0; $i < 20; $i++) {
-
                 $present = fake()->boolean(85);
 
                 Attendance::create([
                     'student_id' => $enrollment->student_id,
                     'school_class_id' => $enrollment->school_class_id,
-
-                    'date' => now()->subDays(rand(1, 120)),
-
+                    'date' => fake()->dateTimeBetween('-4 months', 'now'),
                     'present' => $present,
-
                     'observation' => $present
                         ? null
                         : fake()->randomElement([
