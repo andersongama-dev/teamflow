@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\TeacherController;
 use App\Http\Controllers\Api\StudentController;
+use App\Http\Controllers\SubjectController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
@@ -59,6 +60,8 @@ Route::middleware('auth')->group(function () {
     })->middleware('permission:subjects.*')
       ->name('classes');
 
+    Route::resource('subjects', SubjectController::class);    
+
     Route::get('/teste-admin', function () {
         return 'Você passou na autorização!';
     })->middleware('permission:users.*');
@@ -70,7 +73,7 @@ Route::middleware('auth')->group(function () {
         ];
     });
 });
-
+ 
 Route::post('/materiais', function () {
     return view('materials.table');
 });
