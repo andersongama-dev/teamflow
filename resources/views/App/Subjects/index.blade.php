@@ -94,15 +94,11 @@
                                                 </flux:button>
                                             </flux:modal.trigger>
 
-                                            <form action="{{ route('subjects.destroy', $subject) }}" method="POST">
-
-                                                @csrf
-                                                @method('DELETE')
-
-                                                <flux:button type="submit" size="sm" variant="danger">
+                                            <flux:modal.trigger name="delete-subject-{{ $subject->id }}">
+                                                <flux:button size="sm" variant="danger">
                                                     Excluir
                                                 </flux:button>
-                                            </form>
+                                            </flux:modal.trigger>
 
                                         </div>
                                     </td>
@@ -154,6 +150,48 @@
                                             </div>
 
                                         </form>
+
+                                    </div>
+
+                                </flux:modal>
+
+                                <flux:modal name="delete-subject-{{ $subject->id }}" class="md:w-[500px]">
+
+                                    <div class="space-y-6">
+
+                                        <div>
+                                            <flux:heading size="lg">
+                                                Confirmar exclusão
+                                            </flux:heading>
+
+                                            <flux:text class="mt-2">
+                                                Tem certeza que deseja excluir a matéria
+                                                <strong>{{ $subject->name }}</strong>?
+                                            </flux:text>
+
+                                            <flux:text class="text-red-500 mt-2">
+                                                Esta ação não poderá ser desfeita.
+                                            </flux:text>
+                                        </div>
+
+                                        <div class="flex justify-end gap-2">
+
+                                            <flux:modal.close>
+                                                <flux:button variant="ghost">
+                                                    Cancelar
+                                                </flux:button>
+                                            </flux:modal.close>
+
+                                            <form action="{{ route('subjects.destroy', $subject) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+
+                                                <flux:button type="submit" variant="danger">
+                                                    Sim, excluir
+                                                </flux:button>
+                                            </form>
+
+                                        </div>
 
                                     </div>
 
