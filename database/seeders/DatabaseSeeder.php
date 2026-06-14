@@ -9,6 +9,7 @@ use App\Models\Subject;
 use App\Models\SchoolClass;
 use App\Models\Enrollment;
 use App\Models\Grade;
+use App\Models\Attendance;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -78,6 +79,33 @@ class DatabaseSeeder extends Seeder
                     'assessment_name' => $assessment,
                     'grade' => fake()->randomFloat(2, 4, 10),
                     'assessment_date' => fake()->dateTimeBetween('-6 months', 'now'),
+                ]);
+            }
+        }
+
+        $enrollments = Enrollment::all();
+
+        foreach ($enrollments as $enrollment) {
+            for ($i = 0; $i < 20; $i++) {
+
+                $present = fake()->boolean(85);
+
+                Attendance::create([
+                    'student_id' => $enrollment->student_id,
+                    'school_class_id' => $enrollment->school_class_id,
+
+                    'date' => now()->subDays(rand(1, 120)),
+
+                    'present' => $present,
+
+                    'observation' => $present
+                        ? null
+                        : fake()->randomElement([
+                            'Medical certificate',
+                            'Unjustified absence',
+                            'Family commitment',
+                            'Late arrival',
+                        ]),
                 ]);
             }
         }
