@@ -48,15 +48,14 @@ class SubjectController extends Controller
             ->with('success', 'Subject created successfully.');
     }
 
-    public function show(Subject $subject)
-    {
-        $subject->load('teacher');
-
-        return view('subjects.show', compact('subject'));
-    }
-
     public function update(Request $request, Subject $subject)
     {
+        $teacher = auth()->user()->teacher;
+
+        if (!$teacher || $subject->teacher_id !== $teacher->id) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'code' => ['required', 'string', 'max:50', 'unique:subjects,code,' . $subject->id],
@@ -64,7 +63,7 @@ class SubjectController extends Controller
             'description' => ['nullable', 'string'],
         ]);
 
-        $validated['teacher_id'] = auth()->user()->teacher->id;
+        $validated['teacher_id'] = $teacher->id;
 
         $subject->update($validated);
 
@@ -75,6 +74,12 @@ class SubjectController extends Controller
 
     public function destroy(Subject $subject)
     {
+        $teacher = auth()->user()->teacher;
+
+        if (!$teacher || $subject->teacher_id !== $teacher->id) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $subject->delete();
 
         return redirect()
