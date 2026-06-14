@@ -60,7 +60,7 @@ Route::middleware('auth')->group(function () {
     })->middleware('permission:subjects.*')
       ->name('classes');
 
-    Route::resource('subjects', SubjectController::class);    
+    Route::resource('subjects', SubjectController::class)->middleware('role:Administrador|Professor');;
 
     Route::get('/teste-admin', function () {
         return 'Você passou na autorização!';
