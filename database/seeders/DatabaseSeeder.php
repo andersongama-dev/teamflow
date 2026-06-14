@@ -7,6 +7,7 @@ use App\Models\Student;
 use App\Models\Teacher;
 use App\Models\Subject;
 use App\Models\SchoolClass;
+use App\Models\Enrollment;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -40,5 +41,23 @@ class DatabaseSeeder extends Seeder
         Subject::factory(20)->create();
 
         SchoolClass::factory(20)->create();
+
+        $students = Student::all();
+        $classes = SchoolClass::all();
+
+        foreach ($students as $student) {
+            $selectedClasses = $classes->random(
+                min(rand(3, 6), $classes->count())
+            );
+
+            foreach ($selectedClasses as $class) {
+                Enrollment::create([
+                    'student_id' => $student->id,
+                    'school_class_id' => $class->id,
+                    'enrollment_date' => now(),
+                    'status' => 'active',
+                ]);
+            }
+        }
     }
 }
