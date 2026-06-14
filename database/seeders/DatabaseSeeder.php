@@ -8,6 +8,7 @@ use App\Models\Teacher;
 use App\Models\Subject;
 use App\Models\SchoolClass;
 use App\Models\Enrollment;
+use App\Models\Grade;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -56,6 +57,27 @@ class DatabaseSeeder extends Seeder
                     'school_class_id' => $class->id,
                     'enrollment_date' => now(),
                     'status' => 'active',
+                ]);
+            }
+        }
+
+        $enrollments = Enrollment::with('schoolClass')->get();
+
+        foreach ($enrollments as $enrollment) {
+            foreach ([
+                'Exam 1',
+                'Exam 2',
+                'Assignment',
+                'Final Exam'
+            ] as $assessment) {
+
+                Grade::create([
+                    'student_id' => $enrollment->student_id,
+                    'school_class_id' => $enrollment->school_class_id,
+                    'teacher_id' => $enrollment->schoolClass->teacher_id,
+                    'assessment_name' => $assessment,
+                    'grade' => fake()->randomFloat(2, 4, 10),
+                    'assessment_date' => fake()->dateTimeBetween('-6 months', 'now'),
                 ]);
             }
         }
