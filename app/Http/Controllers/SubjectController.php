@@ -55,22 +55,16 @@ class SubjectController extends Controller
         return view('subjects.show', compact('subject'));
     }
 
-    public function edit(Subject $subject)
-    {
-        $teachers = Teacher::orderBy('id')->get();
-
-        return view('subjects.edit', compact('subject', 'teachers'));
-    }
-
     public function update(Request $request, Subject $subject)
     {
         $validated = $request->validate([
-            'teacher_id' => ['required', 'exists:teachers,id'],
             'name' => ['required', 'string', 'max:255'],
             'code' => ['required', 'string', 'max:50', 'unique:subjects,code,' . $subject->id],
             'workload_hours' => ['required', 'integer', 'min:1'],
             'description' => ['nullable', 'string'],
         ]);
+
+        $validated['teacher_id'] = auth()->user()->teacher->id;
 
         $subject->update($validated);
 
