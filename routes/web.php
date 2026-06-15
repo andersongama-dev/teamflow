@@ -56,13 +56,6 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/students-complete-profile', [StudentController::class, 'store'])->name('students.profile.store');
 
-    /*
-    Route::get('/materiais', function () {
-        return view('App.materials.table');
-    })->middleware('permission:subjects.*')
-      ->name('classes');
-      */
-
     Route::resource('subjects', SubjectController::class)->middleware('role:Administrador|Professor');
 
     Route::get('/teste-admin', function () {
@@ -82,6 +75,6 @@ Route::middleware(['auth', 'role:Administrador|Professor'])
         Route::resource('classes', SchoolClassController::class);
 });
  
-Route::post('/materiais', function () {
-    return view('materials.table');
+Route::get('/materiais', function () {
+    return view('App.materials.table');
 });

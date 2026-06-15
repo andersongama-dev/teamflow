@@ -38,7 +38,7 @@ class TeacherController extends Controller
             ]);
         }
 
-        return redirect()->route('classes')
+        return redirect('/classes')
             ->with('success', 'Perfil do professor salvo com sucesso');
     }
 }
