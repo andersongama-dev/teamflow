@@ -1,155 +1,137 @@
 @extends('layoutApp')
 
 @section('container')
-    <div class="flex items-center justify-between mb-8">
+    <div>
 
-        <div>
-            <h1 class="text-2xl font-semibold">
-                Turmas
-            </h1>
+        <div class="flex items-center justify-between mb-8">
 
-            <p class="text-sm text-zinc-500">
-                {{ $classes->total() }} turmas cadastradas
-            </p>
+            <div>
+                <h1 class="text-2xl font-semibold">
+                    Turmas
+                </h1>
+
+                <p class="text-sm text-zinc-500">
+                    {{ $classes->total() }} turmas cadastradas
+                </p>
+            </div>
+
+            @if (auth()->user()->hasRole('Professor'))
+                <flux:modal.trigger name="create-class">
+                    <flux:button color="orange" class="cursor-pointer">
+                        Nova Turma
+                    </flux:button>
+                </flux:modal.trigger>
+            @endif
+
         </div>
 
-        @if (auth()->user()->hasRole('Professor'))
-            <flux:modal.trigger name="create-class">
-                <flux:button color="orange" class="cursor-pointer">
-                    Nova Turma
-                </flux:button>
-            </flux:modal.trigger>
-        @endif
+        <flux:card class="overflow-hidden">
 
-    </div>
+            @if ($classes->count())
+                <div class="flex flex-col divide-y divide-zinc-200 dark:divide-zinc-800">
 
-    <flux:card class="overflow-hidden">
+                    @foreach ($classes as $class)
+                        <div
+                            class="p-4 md:p-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/30 transition">
 
-        @if ($classes->count())
-            <div class="overflow-x-auto">
+                            {{-- LEFT --}}
+                            <div class="flex flex-col gap-2 min-w-0">
 
-                <table class="w-full">
+                                <div class="flex items-center gap-3 flex-wrap">
 
-                    <thead>
-                        <tr class="border-b">
+                                    <p class="font-semibold text-zinc-900 dark:text-zinc-100 truncate">
+                                        {{ $class->name }}
+                                    </p>
 
-                            <th class="px-6 py-4 text-left text-sm font-medium">
-                                Disciplina
-                            </th>
-
-                            <th class="px-6 py-4 text-left text-sm font-medium">
-                                Nome da Turma
-                            </th>
-
-                            <th class="px-6 py-4 text-left text-sm font-medium">
-                                Professor
-                            </th>
-
-                            <th class="px-6 py-4 text-left text-sm font-medium">
-                                Ano/Semestre
-                            </th>
-
-                            <th class="px-6 py-4 text-left text-sm font-medium">
-                                Sala
-                            </th>
-
-                            <th class="px-6 py-4 text-right text-sm font-medium">
-                                Ações
-                            </th>
-
-                        </tr>
-                    </thead>
-
-                    <tbody>
-
-                        @foreach ($classes as $class)
-                            <tr class="border-b hover:bg-zinc-50 dark:hover:bg-zinc-800/40 transition-colors">
-
-                                <td class="px-6 py-5">
                                     <flux:badge size="sm">
                                         {{ $class->subject?->name }}
                                     </flux:badge>
-                                </td>
 
-                                <td class="px-6 py-5">
-                                    <div class="font-medium">
-                                        {{ $class->name }}
-                                    </div>
-                                </td>
+                                </div>
 
-                                <td class="px-6 py-5">
-                                    {{ $class->teacher?->user?->name ?? 'Sistema' }}
-                                </td>
+                                <div class="flex flex-wrap gap-x-6 gap-y-1 text-sm text-zinc-500">
 
-                                <td class="px-6 py-5">
-                                    <flux:badge size="sm">
+                                    <span>
+                                        <span class="text-zinc-400">Professor:</span>
+                                        {{ $class->teacher?->user?->name ?? 'Sistema' }}
+                                    </span>
+
+                                    <span>
+                                        <span class="text-zinc-400">Ano/Semestre:</span>
                                         {{ $class->academic_year }} / {{ $class->semester }}
-                                    </flux:badge>
-                                </td>
+                                    </span>
 
-                                <td class="px-6 py-5">
-                                    <flux:badge size="sm">
+                                    <span>
+                                        <span class="text-zinc-400">Sala:</span>
                                         {{ $class->room ?? '-' }}
-                                    </flux:badge>
-                                </td>
+                                    </span>
 
-                                <td class="px-6 py-5">
-                                    <div class="flex justify-end gap-2">
+                                </div>
 
-                                        @php($user = auth()->user())
+                            </div>
 
-                                        @if ($user->hasRole('Administrador') || ($user->hasRole('Professor') && $class->teacher_id === $user->teacher?->id))
-                                            <flux:modal.trigger name="edit-class-{{ $class->id }}">
-                                                <flux:button size="sm" variant="filled" class="cursor-pointer">
-                                                    Editar
-                                                </flux:button>
-                                            </flux:modal.trigger>
+                            {{-- RIGHT --}}
+                            <div class="flex flex-col md:items-end justify-between gap-4 md:gap-6">
 
-                                            <flux:modal.trigger name="delete-class-{{ $class->id }}">
-                                                <flux:button size="sm" variant="danger" class="cursor-pointer">
-                                                    Excluir
-                                                </flux:button>
-                                            </flux:modal.trigger>
-                                        @endif
+                                <div class="text-sm text-zinc-500 whitespace-nowrap">
+                                    {{ $class->subject?->name }}
+                                </div>
 
-                                    </div>
-                                </td>
+                                <div class="flex gap-2">
 
-                            </tr>
+                                    @php($user = auth()->user())
 
-                            @include('App.SchoolClasses.components.edit-modal', [
-                                'class' => $class,
-                            ])
+                                    @if ($user->hasRole('Administrador') || ($user->hasRole('Professor') && $class->teacher_id === $user->teacher?->id))
+                                        <flux:modal.trigger name="edit-class-{{ $class->id }}">
+                                            <flux:button size="sm" variant="filled" class="cursor-pointer">
+                                                Editar
+                                            </flux:button>
+                                        </flux:modal.trigger>
 
-                            @include('App.SchoolClasses.components.delete-modal', [
-                                'class' => $class,
-                            ])
-                        @endforeach
+                                        <flux:modal.trigger name="delete-class-{{ $class->id }}">
+                                            <flux:button size="sm" variant="danger" class="cursor-pointer">
+                                                Excluir
+                                            </flux:button>
+                                        </flux:modal.trigger>
+                                    @endif
 
-                    </tbody>
+                                </div>
 
-                </table>
+                            </div>
 
-            </div>
-        @else
-            <div class="py-20 text-center">
-                <flux:heading size="lg">
-                    Nenhuma turma encontrada
-                </flux:heading>
+                        </div>
 
-                <flux:text class="mt-2">
-                    Crie sua primeira turma para começar.
-                </flux:text>
+                        @include('App.SchoolClasses.components.edit-modal', [
+                            'class' => $class,
+                        ])
+
+                        @include('App.SchoolClasses.components.delete-modal', [
+                            'class' => $class,
+                        ])
+                    @endforeach
+
+                </div>
+            @else
+                <div class="py-20 text-center">
+                    <flux:heading size="lg">
+                        Nenhuma turma encontrada
+                    </flux:heading>
+
+                    <flux:text class="mt-2">
+                        Crie sua primeira turma para começar.
+                    </flux:text>
+                </div>
+            @endif
+
+        </flux:card>
+
+        @if ($classes->count())
+            <div class="mt-6">
+                {{ $classes->links() }}
             </div>
         @endif
 
-    </flux:card>
-
-    @if ($classes->count())
-        <div class="mt-6">
-            {{ $classes->links() }}
-        </div>
-    @endif
+    </div>
 
     @include('App.SchoolClasses.components.create-modal')
 @endsection
