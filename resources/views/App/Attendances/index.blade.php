@@ -94,6 +94,14 @@
                                     </td>
 
                                 </tr>
+
+                                @include('App.Attendances.components.edit-modal', [
+                                    'attendance' => $attendance,
+                                ])
+
+                                @include('App.Attendances.components.delete-modal', [
+                                    'attendance' => $attendance,
+                                ])
                             @endforeach
 
                         </tbody>

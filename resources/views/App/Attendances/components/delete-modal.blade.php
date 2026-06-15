@@ -1,6 +1,6 @@
-@props(['grade'])
+@props(['attendance'])
 
-<flux:modal name="delete-grade-{{ $grade->id }}" class="md:w-[500px]">
+<flux:modal name="delete-attendance-{{ $attendance->id }}" class="md:w-[500px]">
 
     <div class="space-y-6">
 
@@ -10,8 +10,8 @@
             </flux:heading>
 
             <flux:text class="mt-2">
-                Tem certeza que deseja excluir a nota de
-                <strong>{{ $grade->student?->user?->name }}</strong>?
+                Tem certeza que deseja excluir o registro de frequência de
+                <strong>{{ $attendance->student?->user?->name }}</strong>?
             </flux:text>
 
             <flux:text class="text-red-500 mt-2">
@@ -27,14 +27,13 @@
                 </flux:button>
             </flux:modal.close>
 
-            <form action="{{ route('grades.destroy', $grade) }}" method="POST">
+            <form action="{{ route('attendances.destroy', $attendance) }}" method="POST">
                 @csrf
                 @method('DELETE')
 
                 <flux:button type="submit" variant="danger" class="cursor-pointer">
                     Sim, excluir
                 </flux:button>
-
             </form>
 
         </div>
