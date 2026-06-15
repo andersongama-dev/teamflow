@@ -106,7 +106,9 @@
 
                                             @php($user = auth()->user())
 
-                                            @if ($user->hasRole('Administrador') || $user->hasRole('Professor') || $user->hasRole('Aluno'))
+                                            @if (
+                                                $user->hasRole('Administrador') ||
+                                                    ($user->hasRole('Professor') && $enrollment->schoolClass->teacher_id === $user->teacher?->id))
                                                 <flux:modal.trigger name="edit-enrollment-{{ $enrollment->id }}">
                                                     <flux:button size="sm" variant="filled">
                                                         Editar
@@ -116,6 +118,14 @@
                                                 <flux:modal.trigger name="delete-enrollment-{{ $enrollment->id }}">
                                                     <flux:button size="sm" variant="danger">
                                                         Excluir
+                                                    </flux:button>
+                                                </flux:modal.trigger>
+                                            @endif
+
+                                            @if ($user->hasRole('Aluno') && $enrollment->student_id === $user->student?->id)
+                                                <flux:modal.trigger name="delete-enrollment-{{ $enrollment->id }}">
+                                                    <flux:button size="sm" variant="danger">
+                                                        Cancelar matrícula
                                                     </flux:button>
                                                 </flux:modal.trigger>
                                             @endif
