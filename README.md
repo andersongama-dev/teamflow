@@ -62,18 +62,18 @@ O objetivo do projeto foi ir além do escopo inicial proposto em sala de aula, i
 
 ### Tabelas Principais
 
-| Tabela | Descrição |
-|----------|----------|
-| users | Usuários do sistema |
-| roles | Perfis de acesso |
-| students | Alunos |
-| teachers | Professores |
-| subjects | Matérias |
-| school_classes | Turmas |
-| enrollments | Matrículas |
-| grades | Notas |
-| attendances | Frequências |
-| activity_logs | Histórico de ações |
+| Tabela         | Descrição           |
+| -------------- | ------------------- |
+| users          | Usuários do sistema |
+| roles          | Perfis de acesso    |
+| students       | Alunos              |
+| teachers       | Professores         |
+| subjects       | Matérias            |
+| school_classes | Turmas              |
+| enrollments    | Matrículas          |
+| grades         | Notas               |
+| attendances    | Frequências         |
+| activity_logs  | Histórico de ações  |
 
 > Observação: durante o desenvolvimento a entidade `classes` foi substituída por `school_classes` para evitar conflitos com palavras reservadas e melhorar a organização do projeto.
 
