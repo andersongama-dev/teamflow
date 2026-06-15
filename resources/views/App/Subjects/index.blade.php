@@ -15,11 +15,13 @@
                 </p>
             </div>
 
-            <flux:modal.trigger name="create-subject">
-                <flux:button color="orange" class="cursor-pointer">
-                    Nova Matéria
-                </flux:button>
-            </flux:modal.trigger>
+            @if (auth()->user()->hasRole('Professor'))
+                <flux:modal.trigger name="create-subject">
+                    <flux:button color="orange" class="cursor-pointer">
+                        Nova Matéria
+                    </flux:button>
+                </flux:modal.trigger>
+            @endif
 
         </div>
 
@@ -56,6 +58,7 @@
                             </tr>
                         </thead>
 
+
                         <tbody>
 
                             @foreach ($subjects as $subject)
@@ -84,7 +87,11 @@
                                     </td>
 
                                     <td class="px-6 py-5">
-                                        {{ $subject->teacher?->user?->name }}
+                                        @if ($subject->teacher)
+                                            {{ $subject->teacher->user->name }}
+                                        @else
+                                            <span class="text-zinc-400">Sistema</span>
+                                        @endif
                                     </td>
 
                                     <td class="px-6 py-5">
@@ -99,17 +106,21 @@
 
                                         <div class="flex justify-end gap-2">
 
-                                            <flux:modal.trigger name="edit-subject-{{ $subject->id }}">
-                                                <flux:button size="sm" variant="filled" class="cursor-pointer">
-                                                    Editar
-                                                </flux:button>
-                                            </flux:modal.trigger>
+                                            @php($user = auth()->user())
 
-                                            <flux:modal.trigger name="delete-subject-{{ $subject->id }}">
-                                                <flux:button size="sm" variant="danger" class="cursor-pointer">
-                                                    Excluir
-                                                </flux:button>
-                                            </flux:modal.trigger>
+                                            @if ($user->hasRole('Administrador') || ($user->hasRole('Professor') && $subject->teacher_id === $user->teacher?->id))
+                                                <flux:modal.trigger name="edit-subject-{{ $subject->id }}">
+                                                    <flux:button size="sm" variant="filled" class="cursor-pointer">
+                                                        Editar
+                                                    </flux:button>
+                                                </flux:modal.trigger>
+
+                                                <flux:modal.trigger name="delete-subject-{{ $subject->id }}">
+                                                    <flux:button size="sm" variant="danger" class="cursor-pointer">
+                                                        Excluir
+                                                    </flux:button>
+                                                </flux:modal.trigger>
+                                            @endif
 
                                         </div>
 

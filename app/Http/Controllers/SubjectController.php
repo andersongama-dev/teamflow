@@ -11,27 +11,26 @@ class SubjectController extends Controller
 {
     public function index()
     {
-        $teacher = auth()->user()->teacher;
+        $user = auth()->user();
 
-        if (!$teacher) {
-            return view('App.Subjects.index', [
-                'subjects' => Subject::whereRaw('1 = 0')->paginate(),
-            ]);
-        }
+        abort_unless($user->hasAnyRole(['Administrador', 'Professor']), 403);
 
-        $subjects = Subject::with([
-                'teacher',
-                'teacher.user',
-            ])
-            ->where('teacher_id', $teacher->id)
+        $subjects = Subject::with(['teacher', 'teacher.user'])
+            ->when($user->hasRole('Professor'), function ($query) use ($user) {
+                $query->where('teacher_id', $user->teacher->id);
+            })
             ->latest()
-            ->paginate(10);
+            ->paginate(8);
 
         return view('App.Subjects.index', compact('subjects'));
     }
 
     public function store(Request $request)
     {
+        $user = auth()->user();
+
+        abort_unless($user->hasRole('Professor'), 403);
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'code' => ['required', 'string', 'max:50', 'unique:subjects,code'],
@@ -39,21 +38,24 @@ class SubjectController extends Controller
             'description' => ['nullable', 'string'],
         ]);
 
-        $validated['teacher_id'] = auth()->user()->teacher->id;
+        $validated['teacher_id'] = $user->teacher->id;
 
         Subject::create($validated);
 
-        return redirect()
-            ->route('subjects.index')
-            ->with('success', 'Subject created successfully.');
+        return redirect()->route('subjects.index');
     }
 
     public function update(Request $request, Subject $subject)
     {
-        $teacher = auth()->user()->teacher;
+        $user = auth()->user();
 
-        if (!$teacher || $subject->teacher_id !== $teacher->id) {
-            abort(403, 'Unauthorized action.');
+        abort_unless($user->hasAnyRole(['Administrador', 'Professor']), 403);
+
+        if (
+            $user->hasRole('Professor') &&
+            $subject->teacher_id !== $user->teacher->id
+        ) {
+            abort(403);
         }
 
         $validated = $request->validate([
@@ -63,27 +65,26 @@ class SubjectController extends Controller
             'description' => ['nullable', 'string'],
         ]);
 
-        $validated['teacher_id'] = $teacher->id;
-
         $subject->update($validated);
 
-        return redirect()
-            ->route('subjects.index')
-            ->with('success', 'Subject updated successfully.');
+        return redirect()->route('subjects.index');
     }
 
     public function destroy(Subject $subject)
     {
-        $teacher = auth()->user()->teacher;
+        $user = auth()->user();
 
-        if (!$teacher || $subject->teacher_id !== $teacher->id) {
-            abort(403, 'Unauthorized action.');
+        abort_unless($user->hasAnyRole(['Administrador', 'Professor']), 403);
+
+        if (
+            $user->hasRole('Professor') &&
+            $subject->teacher_id !== $user->teacher->id
+        ) {
+            abort(403);
         }
 
         $subject->delete();
 
-        return redirect()
-            ->route('subjects.index')
-            ->with('success', 'Subject deleted successfully.');
+        return redirect()->route('subjects.index');
     }
 }
