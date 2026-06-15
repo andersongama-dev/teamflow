@@ -3,6 +3,8 @@
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\TeacherController;
 use App\Http\Controllers\Api\StudentController;
+use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\SchoolClassController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
@@ -54,10 +56,7 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/students-complete-profile', [StudentController::class, 'store'])->name('students.profile.store');
 
-    Route::get('/materiais', function () {
-        return view('App.materials.table');
-    })->middleware('permission:subjects.*')
-      ->name('classes');
+    Route::resource('subjects', SubjectController::class)->middleware('role:Administrador|Professor');
 
     Route::get('/teste-admin', function () {
         return 'Você passou na autorização!';
@@ -71,6 +70,11 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-Route::post('/materiais', function () {
-    return view('materials.table');
+Route::middleware(['auth', 'role:Administrador|Professor'])
+    ->group(function () {
+        Route::resource('classes', SchoolClassController::class);
+});
+ 
+Route::get('/materiais', function () {
+    return view('App.materials.table');
 });

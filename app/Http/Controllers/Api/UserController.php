@@ -60,7 +60,7 @@ class UserController extends Controller
                 return redirect()->route('accountType');
             }
 
-            return redirect()->route('classes');
+            return $this->redirectByRole(auth()->user());
         }
 
         return back()->withErrors([
@@ -98,5 +98,22 @@ class UserController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/sign-in');
+    }
+
+    private function redirectByRole($user)
+    {
+        if ($user->hasRole('Administrador')) {
+            return redirect()->route('classes.index');
+        }
+
+        if ($user->hasRole('Professor')) {
+            return redirect()->route('classes.index');
+        }
+
+        if ($user->hasRole('Aluno')) {
+            return redirect('/materiais');
+        }
+
+        return redirect()->route('accountType');
     }
 }

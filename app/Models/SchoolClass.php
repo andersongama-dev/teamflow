@@ -6,30 +6,34 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Subject;
+use App\Models\Teacher;
+use App\Models\Enrollment;
+use App\Models\Grade;
+use App\Models\Attendance;
 
-class Student extends Model
+class SchoolClass extends Model
 {
 
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
-        'registration_number',
-        'birth_date',
-        'phone',
-        'address',
-        'enrollment_date',
-        'status',
+        'subject_id',
+        'teacher_id',
+        'name',
+        'academic_year',
+        'semester',
+        'room',
     ];
 
-    protected $casts = [
-        'birth_date' => 'date',
-        'enrollment_date' => 'date',
-    ];
-
-    public function user(): BelongsTo
+    public function subject(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Subject::class);
+    }
+
+    public function teacher(): BelongsTo
+    {
+        return $this->belongsTo(Teacher::class);
     }
 
     public function enrollments(): HasMany
