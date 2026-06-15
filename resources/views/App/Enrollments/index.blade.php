@@ -15,7 +15,7 @@
                 </p>
             </div>
 
-            @if (auth()->user()->hasAnyRole(['Administrador', 'Professor', 'Aluno']))
+            @if (auth()->user()->hasAnyRole(['Professor', 'Aluno']))
                 <flux:modal.trigger name="create-enrollment">
                     <flux:button color="orange" class="cursor-pointer">
                         Nova Matrícula

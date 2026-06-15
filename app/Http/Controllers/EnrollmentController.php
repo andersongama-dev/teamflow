@@ -46,7 +46,7 @@ class EnrollmentController extends Controller
         $user = auth()->user();
 
         abort_unless(
-            $user->hasAnyRole(['Administrador', 'Professor', 'Aluno']),
+            $user->hasAnyRole(['Professor', 'Aluno']),
             403
         );
 
