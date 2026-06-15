@@ -47,8 +47,15 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 
-    Route::get('/account-type', fn () => view('Auth.accountType'))
-        ->name('accountType');
+    Route::get('/account-type', function () {
+        $user = auth()->user();
+
+        if ($user->hasRole(['Aluno', 'Professor', 'Administrador'])) {
+            return redirect('/enrollments');
+        }
+
+        return view('Auth.accountType');
+    })->name('accountType');
 
     Route::post('/account-type', [UserController::class, 'selectRole'])
         ->name('accountType.store');
