@@ -8,6 +8,7 @@ use App\Http\Controllers\SchoolClassController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\GradeController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
@@ -125,4 +126,16 @@ Route::get('/teste-admin', function () {
 
 Route::get('/materiais', function () {
     return view('App.materials.table');
+});
+
+Route::middleware('auth')->group(function () {
+
+    Route::get('/dashboard', [DashboardController::class, 'admin'])
+        ->name('dashboard.admin');
+
+    Route::get('/dashboard/teacher', [DashboardController::class, 'teacher'])
+        ->name('dashboard.teacher');
+
+    Route::get('/dashboard/student', [DashboardController::class, 'student'])
+        ->name('dashboard.student');
 });
