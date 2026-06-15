@@ -29,7 +29,7 @@ class AttendanceController extends Controller
                 });
             })
             ->latest()
-            ->paginate(10);
+            ->paginate(6);
 
         return view('App.Attendances.index', [
             'attendances' => $attendances,
