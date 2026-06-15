@@ -13,26 +13,30 @@ class GradeController extends Controller
     {
         $user = auth()->user();
 
-        abort_unless(
-            $user->hasAnyRole(['Administrador', 'Professor', 'Aluno']),
-            403
-        );
+        abort_unless($user->hasAnyRole(['Administrador', 'Professor', 'Aluno']), 403);
 
         $grades = Grade::with([
-                'student.user',
-                'schoolClass.subject',
-                'teacher.user',
-            ])
-            ->when($user->hasRole('Aluno'), function ($query) use ($user) {
-                $query->where('student_id', $user->student?->id);
-            })
-            ->when($user->hasRole('Professor'), function ($query) use ($user) {
-                $query->where('teacher_id', $user->teacher?->id);
-            })
-            ->latest()
-            ->paginate(10);
+            'student.user',
+            'schoolClass.subject',
+            'schoolClass.teacher.user',
+            'teacher.user',
+        ])
+        ->when($user->hasRole('Aluno'), function ($query) use ($user) {
+            $query->where('student_id', $user->student->id);
+        })
+        ->when($user->hasRole('Professor'), function ($query) use ($user) {
+            $query->where('teacher_id', $user->teacher?->id);
+        })
+        ->latest()
+        ->paginate(10);
 
-        return view('App.Grades.index', compact('grades'));
+        $classes = SchoolClass::when($user->hasRole('Professor'), function ($query) use ($user) {
+            $query->where('teacher_id', $user->teacher?->id);
+        })->get();
+
+        $students = Student::with('user')->get();
+
+        return view('App.Grades.index', compact('grades', 'classes', 'students'));
     }
 
     public function store(Request $request)
