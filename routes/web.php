@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\Api\TeacherController;
-use App\Http\Controllers\Api\StudentController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\SchoolClassController;
 use App\Http\Controllers\EnrollmentController;
