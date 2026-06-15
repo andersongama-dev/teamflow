@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\TeacherController;
 use App\Http\Controllers\Api\StudentController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\SchoolClassController;
+use App\Http\Controllers\EnrollmentController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
@@ -74,6 +75,11 @@ Route::middleware(['auth', 'role:Administrador|Professor'])
     ->group(function () {
         Route::resource('classes', SchoolClassController::class);
 });
+
+Route::middleware(['auth'])
+    ->group(function () {
+        Route::resource('enrollments', EnrollmentController::class);
+    });
  
 Route::get('/materiais', function () {
     return view('App.materials.table');
