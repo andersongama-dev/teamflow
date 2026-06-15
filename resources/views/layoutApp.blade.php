@@ -16,6 +16,8 @@
     <link rel="icon" type="image/png" href="{{ asset('assets/logoTeamFlow.svg') }}">
 
     @fluxAppearance
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body class="min-h-screen bg-white dark:bg-zinc-800 antialiased">
@@ -27,29 +29,23 @@
                 class="in-data-flux-sidebar-on-desktop:not-in-data-flux-sidebar-collapsed-desktop:-mr-2" />
         </flux:sidebar.header>
 
-        @can('dashboard.admin')
-            <flux:sidebar.item icon="chart-pie" href="/dashboard" :current="request()->is('dashboard*')">
+        @php($user = auth()->user())
 
-                Dashboard Admin
-
+        @if ($user->hasRole('Administrador'))
+            <flux:sidebar.item icon="chart-pie" href="/dashboard" :current="request()->routeIs('dashboard.admin')">
+                Dashboard
             </flux:sidebar.item>
-        @endcan
-
-        @can('dashboard.teacher')
-            <flux:sidebar.item icon="chart-pie" href="/dashboard/teacher" :current="request()->is('dashboard*')">
-
-                Dashboard Teacher
-
+        @elseif ($user->hasRole('Professor'))
+            <flux:sidebar.item icon="chart-pie" href="/dashboard/teacher"
+                :current="request()->routeIs('dashboard.teacher')">
+                Dashboard
             </flux:sidebar.item>
-        @endcan
-
-        @can('dashboard.student')
-            <flux:sidebar.item icon="chart-pie" href="/dashboard/student" :current="request()->is('dashboard*')">
-
-                Dashboard Aluno
-
+        @elseif ($user->hasRole('Aluno'))
+            <flux:sidebar.item icon="chart-pie" href="/dashboard/student"
+                :current="request()->routeIs('dashboard.student')">
+                Dashboard
             </flux:sidebar.item>
-        @endcan
+        @endif
 
         @can('subjects.*')
             <flux:sidebar.item icon="book-open" href="/subjects" :current="request()->is('subjects*')">
@@ -95,14 +91,6 @@
             <flux:sidebar.item icon="clipboard-document-check" href="/attendances" :current="request()->is('attendances*')">
 
                 Frequências
-
-            </flux:sidebar.item>
-        @endcan
-
-        @can('users.*')
-            <flux:sidebar.item icon="users" href="/users" :current="request()->is('users*')">
-
-                Usuários
 
             </flux:sidebar.item>
         @endcan
