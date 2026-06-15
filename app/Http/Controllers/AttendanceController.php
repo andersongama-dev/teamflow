@@ -44,7 +44,7 @@ class AttendanceController extends Controller
     {
         $user = auth()->user();
 
-        abort_unless($user->hasAnyRole(['Administrador', 'Professor']), 403);
+        abort_unless($user->hasAnyRole(['Professor']), 403);
 
         $validated = $request->validate([
             'student_id' => ['required', 'exists:students,id'],

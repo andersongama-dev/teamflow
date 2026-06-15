@@ -15,7 +15,7 @@
                 </p>
             </div>
 
-            @if (auth()->user()->hasAnyRole(['Administrador', 'Professor']))
+            @if (auth()->user()->hasAnyRole(['Professor']))
                 <flux:modal.trigger name="create-attendance">
                     <flux:button color="orange" class="cursor-pointer">
                         Novo Registro
