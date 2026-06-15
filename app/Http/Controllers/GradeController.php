@@ -44,7 +44,7 @@ class GradeController extends Controller
         $user = auth()->user();
 
         abort_unless(
-            $user->hasAnyRole(['Administrador', 'Professor']),
+            $user->hasAnyRole(['Professor']),
             403
         );
 
@@ -59,12 +59,6 @@ class GradeController extends Controller
         ]);
 
         $class = SchoolClass::findOrFail($validated['school_class_id']);
-
-        abort_unless(
-            $user->hasRole('Administrador') ||
-            $class->teacher_id === $user->teacher->id,
-            403
-        );
 
         $validated['teacher_id'] = $user->teacher->id;
 

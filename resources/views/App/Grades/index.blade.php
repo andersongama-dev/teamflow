@@ -15,7 +15,7 @@
                 </p>
             </div>
 
-            @if (auth()->user()->hasAnyRole(['Administrador', 'Professor']))
+            @if (auth()->user()->hasAnyRole(['Professor']))
                 <flux:modal.trigger name="create-grade">
                     <flux:button color="orange" class="cursor-pointer">
                         Lançar Nota
