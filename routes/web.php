@@ -29,11 +29,13 @@ Route::post('/', function (Request $request) {
 
 Route::get('/sobre', fn () => view('about'));
 
-Route::get('/sign-up', fn () => view('Auth.signUp'));
-Route::get('/sign-in', fn () => view('Auth.signIn'))->name('login');
+Route::middleware('guest')->group(function () {
+    Route::get('/sign-up', fn () => view('Auth.signUp'));
+    Route::get('/sign-in', fn () => view('Auth.signIn'))->name('login');
 
-Route::post('/sign-up', [UserController::class, 'store']);
-Route::post('/sign-in', [UserController::class, 'login']);
+    Route::post('/sign-up', [UserController::class, 'store']);
+    Route::post('/sign-in', [UserController::class, 'login']);
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -45,8 +47,15 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 
-    Route::get('/account-type', fn () => view('Auth.accountType'))
-        ->name('accountType');
+    Route::get('/account-type', function () {
+        $user = auth()->user();
+
+        if ($user->hasRole(['Aluno', 'Professor', 'Administrador'])) {
+            return redirect('/enrollments');
+        }
+
+        return view('Auth.accountType');
+    })->name('accountType');
 
     Route::post('/account-type', [UserController::class, 'selectRole'])
         ->name('accountType.store');
