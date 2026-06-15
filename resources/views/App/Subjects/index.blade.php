@@ -28,118 +28,83 @@
         <flux:card class="overflow-hidden">
 
             @if ($subjects->count())
-                <div class="overflow-x-auto">
+                <div class="flex flex-col divide-y divide-zinc-200 dark:divide-zinc-800">
 
-                    <table class="w-full">
+                    @foreach ($subjects as $subject)
+                        <div
+                            class="p-4 md:p-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/30 transition">
 
-                        <thead>
-                            <tr class="border-b">
+                            {{-- LEFT --}}
+                            <div class="flex flex-col gap-2 min-w-0">
 
-                                <th class="px-6 py-4 text-left text-sm font-medium">
-                                    Código
-                                </th>
+                                <div class="flex items-center gap-3 flex-wrap">
 
-                                <th class="px-6 py-4 text-left text-sm font-medium">
-                                    Matéria
-                                </th>
+                                    <flux:badge size="sm">
+                                        {{ $subject->code }}
+                                    </flux:badge>
 
-                                <th class="px-6 py-4 text-left text-sm font-medium">
-                                    Professor
-                                </th>
+                                    <p class="font-semibold text-zinc-900 dark:text-zinc-100 truncate">
+                                        {{ $subject->name }}
+                                    </p>
 
-                                <th class="px-6 py-4 text-left text-sm font-medium">
-                                    Carga Horária
-                                </th>
+                                    <flux:badge size="sm">
+                                        {{ $subject->workload_hours }}h
+                                    </flux:badge>
 
-                                <th class="px-6 py-4 text-right text-sm font-medium">
-                                    Ações
-                                </th>
+                                </div>
 
-                            </tr>
-                        </thead>
+                                @if ($subject->description)
+                                    <p class="text-sm text-zinc-500">
+                                        {{ \Illuminate\Support\Str::limit($subject->description, 90) }}
+                                    </p>
+                                @endif
 
+                                <div class="text-sm text-zinc-500">
+                                    <span class="text-zinc-400">Professor:</span>
+                                    {{ $subject->teacher?->user?->name ?? 'Sistema' }}
+                                </div>
 
-                        <tbody>
+                            </div>
 
-                            @foreach ($subjects as $subject)
-                                <tr class="border-b hover:bg-zinc-50 dark:hover:bg-zinc-800/40 transition-colors">
+                            {{-- RIGHT --}}
+                            <div class="flex flex-col md:items-end justify-between gap-4 md:gap-6">
 
-                                    <td class="px-6 py-5">
+                                <div class="text-sm text-zinc-500 whitespace-nowrap">
+                                    {{ $subject->workload_hours }}h
+                                </div>
 
-                                        <flux:badge size="sm">
-                                            {{ $subject->code }}
-                                        </flux:badge>
+                                <div class="flex gap-2">
 
-                                    </td>
+                                    @php($user = auth()->user())
 
-                                    <td class="px-6 py-5">
+                                    @if ($user->hasRole('Administrador') || ($user->hasRole('Professor') && $subject->teacher_id === $user->teacher?->id))
+                                        <flux:modal.trigger name="edit-subject-{{ $subject->id }}">
+                                            <flux:button size="sm" variant="filled" class="cursor-pointer">
+                                                Editar
+                                            </flux:button>
+                                        </flux:modal.trigger>
 
-                                        <div class="font-medium">
-                                            {{ $subject->name }}
-                                        </div>
+                                        <flux:modal.trigger name="delete-subject-{{ $subject->id }}">
+                                            <flux:button size="sm" variant="danger" class="cursor-pointer">
+                                                Excluir
+                                            </flux:button>
+                                        </flux:modal.trigger>
+                                    @endif
 
-                                        @if ($subject->description)
-                                            <div class="text-sm text-zinc-500 mt-1">
-                                                {{ Str::limit($subject->description, 70) }}
-                                            </div>
-                                        @endif
+                                </div>
 
-                                    </td>
+                            </div>
 
-                                    <td class="px-6 py-5">
-                                        @if ($subject->teacher)
-                                            {{ $subject->teacher->user->name }}
-                                        @else
-                                            <span class="text-zinc-400">Sistema</span>
-                                        @endif
-                                    </td>
+                        </div>
 
-                                    <td class="px-6 py-5">
+                        @include('App.Subjects.components.edit-modal', [
+                            'subject' => $subject,
+                        ])
 
-                                        <flux:badge size="sm">
-                                            {{ $subject->workload_hours }}h
-                                        </flux:badge>
-
-                                    </td>
-
-                                    <td class="px-6 py-5">
-
-                                        <div class="flex justify-end gap-2">
-
-                                            @php($user = auth()->user())
-
-                                            @if ($user->hasRole('Administrador') || ($user->hasRole('Professor') && $subject->teacher_id === $user->teacher?->id))
-                                                <flux:modal.trigger name="edit-subject-{{ $subject->id }}">
-                                                    <flux:button size="sm" variant="filled" class="cursor-pointer">
-                                                        Editar
-                                                    </flux:button>
-                                                </flux:modal.trigger>
-
-                                                <flux:modal.trigger name="delete-subject-{{ $subject->id }}">
-                                                    <flux:button size="sm" variant="danger" class="cursor-pointer">
-                                                        Excluir
-                                                    </flux:button>
-                                                </flux:modal.trigger>
-                                            @endif
-
-                                        </div>
-
-                                    </td>
-
-                                </tr>
-
-                                @include('App.Subjects.components.edit-modal', [
-                                    'subject' => $subject,
-                                ])
-
-                                @include('App.Subjects.components.delete-modal', [
-                                    'subject' => $subject,
-                                ])
-                            @endforeach
-
-                        </tbody>
-
-                    </table>
+                        @include('App.Subjects.components.delete-modal', [
+                            'subject' => $subject,
+                        ])
+                    @endforeach
 
                 </div>
             @else
@@ -153,13 +118,10 @@
                     </flux:text>
 
                     <flux:modal.trigger name="create-subject">
-
                         <flux:button color="orange" class="mt-6 cursor-pointer">
                             Criar primeira matéria
                         </flux:button>
-
                     </flux:modal.trigger>
-
                 </div>
             @endif
 
