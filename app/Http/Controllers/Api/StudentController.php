@@ -29,6 +29,6 @@ class StudentController extends Controller
             'status' => $request->status,
         ]);
 
-        return redirect()->route('classes');
+        return redirect('/classes');
     }
 }
