@@ -111,7 +111,7 @@ class UserController extends Controller
         }
 
         if ($user->hasRole('Aluno')) {
-            return redirect('/materiais');
+            return redirect('/enrollments');
         }
 
         return redirect()->route('accountType');

@@ -47,7 +47,12 @@ class RolesAndPermissionsSeeder extends Seeder
             "dashboard.teacher",
             "dashboard.student",
 
-            "dashboard.student"
+            "dashboard.student",
+
+            'enrollments.view',
+            'enrollments.create',
+            'enrollments.delete',
+            'enrollments.manage'
         ];
 
         foreach ($permissions as $permission) {
@@ -88,6 +93,10 @@ class RolesAndPermissionsSeeder extends Seeder
             'attendances.edit',
 
             'reports.view',
+
+            'enrollments.view',
+            'enrollments.create',
+            'enrollments.delete',
         ]);
 
         $student->syncPermissions([
@@ -98,6 +107,12 @@ class RolesAndPermissionsSeeder extends Seeder
             'grades.view',
 
             'attendances.view',
+
+            'enrollments.view',
+            'enrollments.create',
+            'enrollments.delete',
+
+            'grades.view',
         ]);
     }
 }

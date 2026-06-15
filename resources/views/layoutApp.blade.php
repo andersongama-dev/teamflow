@@ -49,7 +49,7 @@
             </flux:sidebar.item>
         @endcan
 
-        @can('subjects.*')
+        @can('subjects.view')
             <flux:sidebar.item icon="book-open" href="/subjects" :current="request()->is('subjects*')">
 
                 Matérias
@@ -65,10 +65,34 @@
             </flux:sidebar.item>
         @endcan
 
-        @can('grades.create')
-            <flux:sidebar.item icon="arrow-top-right-on-square" href="/notes" :current="request()->is('notes*')">
+        @can('enrollments.view')
+            <flux:sidebar.item icon="clipboard-document-list" href="/enrollments" :current="request()->is('enrollments*')">
+                Matrículas
+            </flux:sidebar.item>
+        @endcan
 
-                Lançar Notas
+        @php($user = auth()->user())
+
+        @can('grades.view')
+            @if ($user->hasRole('Administrador'))
+                <flux:sidebar.item icon="arrow-top-right-on-square" href="/grades" :current="request()->is('grades*')">
+                    Notas do Sistema
+                </flux:sidebar.item>
+            @elseif ($user->hasRole('Professor'))
+                <flux:sidebar.item icon="arrow-top-right-on-square" href="/grades" :current="request()->is('grades*')">
+                    Notas
+                </flux:sidebar.item>
+            @elseif ($user->hasRole('Aluno'))
+                <flux:sidebar.item icon="arrow-top-right-on-square" href="/grades" :current="request()->is('grades*')">
+                    Minhas Notas
+                </flux:sidebar.item>
+            @endif
+        @endcan
+
+        @can('attendances.view')
+            <flux:sidebar.item icon="clipboard-document-check" href="/attendances" :current="request()->is('attendances*')">
+
+                Frequências
 
             </flux:sidebar.item>
         @endcan
