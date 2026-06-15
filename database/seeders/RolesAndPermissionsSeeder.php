@@ -102,8 +102,6 @@ class RolesAndPermissionsSeeder extends Seeder
         $student->syncPermissions([
             'dashboard.student',
 
-            'subjects.*',
-
             'grades.view',
 
             'attendances.view',
