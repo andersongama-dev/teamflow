@@ -60,7 +60,7 @@ class UserController extends Controller
                 return redirect()->route('accountType');
             }
 
-            return redirect()->route('classes');
+            return redirect('/classes');
         }
 
         return back()->withErrors([
