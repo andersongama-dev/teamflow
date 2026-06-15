@@ -65,6 +65,12 @@
             </flux:sidebar.item>
         @endcan
 
+        @can('enrollments.view')
+            <flux:sidebar.item icon="clipboard-document-list" href="/enrollments" :current="request()->is('enrollments*')">
+                Matrículas
+            </flux:sidebar.item>
+        @endcan
+
         @can('grades.create')
             <flux:sidebar.item icon="arrow-top-right-on-square" href="/notes" :current="request()->is('notes*')">
 
