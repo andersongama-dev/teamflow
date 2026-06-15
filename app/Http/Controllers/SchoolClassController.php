@@ -24,7 +24,7 @@ class SchoolClassController extends Controller
                 $query->where('teacher_id', $user->teacher?->id);
             })
             ->latest()
-            ->paginate(8);
+            ->paginate(6);
 
         $subjects = Subject::when($user->hasRole('Professor'), function ($query) use ($user) {
                 $query->where('teacher_id', $user->teacher?->id);

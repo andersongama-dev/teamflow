@@ -1,6 +1,6 @@
 @props(['attendance'])
 
-<flux:modal name="delete-attendance-{{ $attendance->id }}" class="md:w-[500px]">
+<flux:modal name="delete-attendance-{{ $attendance->id }}" class="md:w-150">
 
     <div class="space-y-6">
 

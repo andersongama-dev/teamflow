@@ -20,7 +20,7 @@ class SubjectController extends Controller
                 $query->where('teacher_id', $user->teacher->id);
             })
             ->latest()
-            ->paginate(8);
+            ->paginate(6);
 
         return view('App.Subjects.index', compact('subjects'));
     }
