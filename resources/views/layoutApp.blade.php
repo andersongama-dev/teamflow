@@ -71,12 +71,22 @@
             </flux:sidebar.item>
         @endcan
 
-        @can('grades.create')
-            <flux:sidebar.item icon="arrow-top-right-on-square" href="/notes" :current="request()->is('notes*')">
+        @php($user = auth()->user())
 
-                Lançar Notas
-
-            </flux:sidebar.item>
+        @can('grades.view')
+            @if ($user->hasRole('Administrador'))
+                <flux:sidebar.item icon="arrow-top-right-on-square" href="/grades" :current="request()->is('grades*')">
+                    Notas do Sistema
+                </flux:sidebar.item>
+            @elseif ($user->hasRole('Professor'))
+                <flux:sidebar.item icon="arrow-top-right-on-square" href="/grades" :current="request()->is('grades*')">
+                    Notas
+                </flux:sidebar.item>
+            @elseif ($user->hasRole('Aluno'))
+                <flux:sidebar.item icon="arrow-top-right-on-square" href="/grades" :current="request()->is('grades*')">
+                    Minhas Notas
+                </flux:sidebar.item>
+            @endif
         @endcan
 
         @can('reports.view')
