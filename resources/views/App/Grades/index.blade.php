@@ -116,13 +116,13 @@
 
                                             @if ($user->hasRole('Administrador') || ($user->hasRole('Professor') && $grade->teacher_id === $user->teacher?->id))
                                                 <flux:modal.trigger name="edit-grade-{{ $grade->id }}">
-                                                    <flux:button size="sm" variant="filled">
+                                                    <flux:button size="sm" variant="filled" class="cursor-pointer">
                                                         Editar
                                                     </flux:button>
                                                 </flux:modal.trigger>
 
                                                 <flux:modal.trigger name="delete-grade-{{ $grade->id }}">
-                                                    <flux:button size="sm" variant="danger">
+                                                    <flux:button size="sm" variant="danger" class="cursor-pointer">
                                                         Excluir
                                                     </flux:button>
                                                 </flux:modal.trigger>
