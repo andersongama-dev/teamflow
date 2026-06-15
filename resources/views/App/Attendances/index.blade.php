@@ -17,7 +17,7 @@
 
             @if (auth()->user()->hasAnyRole(['Administrador', 'Professor']))
                 <flux:modal.trigger name="create-attendance">
-                    <flux:button color="orange">
+                    <flux:button color="orange" class="cursor-pointer">
                         Novo Registro
                     </flux:button>
                 </flux:modal.trigger>
@@ -81,11 +81,13 @@
 
                                         @if (auth()->user()->hasAnyRole(['Administrador', 'Professor']))
                                             <flux:modal.trigger name="edit-attendance-{{ $attendance->id }}">
-                                                <flux:button size="sm" variant="filled">Editar</flux:button>
+                                                <flux:button size="sm" variant="filled" class="cursor-pointer">Editar
+                                                </flux:button>
                                             </flux:modal.trigger>
 
                                             <flux:modal.trigger name="delete-attendance-{{ $attendance->id }}">
-                                                <flux:button size="sm" variant="danger">Excluir</flux:button>
+                                                <flux:button size="sm" variant="danger" class="cursor-pointer">Excluir
+                                                </flux:button>
                                             </flux:modal.trigger>
                                         @endif
 
