@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\StudentController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\SchoolClassController;
 use App\Http\Controllers\EnrollmentController;
+use App\Http\Controllers\GradeController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
@@ -79,7 +80,12 @@ Route::middleware(['auth', 'role:Administrador|Professor'])
 Route::middleware(['auth'])
     ->group(function () {
         Route::resource('enrollments', EnrollmentController::class);
-    });
+});
+
+Route::middleware(['auth', 'role:Administrador|Professor|Aluno'])
+    ->group(function () {
+        Route::resource('grades', GradeController::class);
+});
  
 Route::get('/materiais', function () {
     return view('App.materials.table');
