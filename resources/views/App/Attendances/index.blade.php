@@ -28,85 +28,84 @@
         <flux:card class="overflow-hidden">
 
             @if ($attendances->count())
-                <div class="overflow-x-auto">
+                <div class="flex flex-col divide-y divide-zinc-200 dark:divide-zinc-800">
 
-                    <table class="w-full">
+                    @foreach ($attendances as $attendance)
+                        <div
+                            class="p-4 md:p-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/30 transition">
 
-                        <thead>
-                            <tr class="border-b">
+                            {{-- LEFT: main info --}}
+                            <div class="flex flex-col gap-2 min-w-0">
 
-                                <th class="px-6 py-4 text-left text-sm font-medium">Aluno</th>
-                                <th class="px-6 py-4 text-left text-sm font-medium">Turma</th>
-                                <th class="px-6 py-4 text-left text-sm font-medium">Disciplina</th>
-                                <th class="px-6 py-4 text-left text-sm font-medium">Professor</th>
-                                <th class="px-6 py-4 text-left text-sm font-medium">Data</th>
-                                <th class="px-6 py-4 text-left text-sm font-medium">Presença</th>
-                                <th class="px-6 py-4 text-right text-sm font-medium">Ações</th>
+                                <div class="flex items-center gap-3 flex-wrap">
 
-                            </tr>
-                        </thead>
-
-                        <tbody>
-
-                            @foreach ($attendances as $attendance)
-                                <tr class="border-b hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
-
-                                    <td class="px-6 py-5">
+                                    <p class="font-semibold text-zinc-900 dark:text-zinc-100 truncate">
                                         {{ $attendance->student?->user?->name }}
-                                    </td>
+                                    </p>
 
-                                    <td class="px-6 py-5">
+                                    <flux:badge size="sm">
+                                        {{ $attendance->present ? 'Presente' : 'Falta' }}
+                                    </flux:badge>
+
+                                </div>
+
+                                <div class="flex flex-wrap gap-x-6 gap-y-1 text-sm text-zinc-500">
+
+                                    <span>
+                                        <span class="text-zinc-400">Turma:</span>
                                         {{ $attendance->schoolClass?->name }}
-                                    </td>
+                                    </span>
 
-                                    <td class="px-6 py-5">
+                                    <span>
+                                        <span class="text-zinc-400">Disciplina:</span>
                                         {{ $attendance->schoolClass?->subject?->name }}
-                                    </td>
+                                    </span>
 
-                                    <td class="px-6 py-5">
+                                    <span>
+                                        <span class="text-zinc-400">Professor:</span>
                                         {{ $attendance->schoolClass?->teacher?->user?->name ?? 'Sistema' }}
-                                    </td>
+                                    </span>
 
-                                    <td class="px-6 py-5">
-                                        {{ $attendance->date }}
-                                    </td>
+                                </div>
 
-                                    <td class="px-6 py-5">
-                                        <flux:badge size="sm">
-                                            {{ $attendance->present ? 'Presente' : 'Falta' }}
-                                        </flux:badge>
-                                    </td>
+                            </div>
 
-                                    <td class="px-6 py-5 text-right">
+                            <div class="flex flex-col justify-between md:justify-end gap-4 md:gap-6">
 
-                                        @if (auth()->user()->hasAnyRole(['Administrador', 'Professor']))
-                                            <flux:modal.trigger name="edit-attendance-{{ $attendance->id }}">
-                                                <flux:button size="sm" variant="filled" class="cursor-pointer">Editar
-                                                </flux:button>
-                                            </flux:modal.trigger>
+                                <div class="text-sm text-zinc-500 whitespace-nowrap">
+                                    {{ $attendance->date }}
+                                </div>
 
-                                            <flux:modal.trigger name="delete-attendance-{{ $attendance->id }}">
-                                                <flux:button size="sm" variant="danger" class="cursor-pointer">Excluir
-                                                </flux:button>
-                                            </flux:modal.trigger>
-                                        @endif
+                                @if (auth()->user()->hasAnyRole(['Administrador', 'Professor']))
+                                    <div class="flex gap-2">
 
-                                    </td>
+                                        <flux:modal.trigger name="edit-attendance-{{ $attendance->id }}">
+                                            <flux:button size="sm" variant="filled" class="cursor-pointer">
+                                                Editar
+                                            </flux:button>
+                                        </flux:modal.trigger>
 
-                                </tr>
+                                        <flux:modal.trigger name="delete-attendance-{{ $attendance->id }}">
+                                            <flux:button size="sm" variant="danger" class="cursor-pointer">
+                                                Excluir
+                                            </flux:button>
+                                        </flux:modal.trigger>
 
-                                @include('App.Attendances.components.edit-modal', [
-                                    'attendance' => $attendance,
-                                ])
+                                    </div>
+                                @endif
 
-                                @include('App.Attendances.components.delete-modal', [
-                                    'attendance' => $attendance,
-                                ])
-                            @endforeach
+                            </div>
 
-                        </tbody>
+                        </div>
 
-                    </table>
+                        @include('App.Attendances.components.edit-modal', [
+                            'attendance' => $attendance,
+                        ])
+
+                        @include('App.Attendances.components.delete-modal', [
+                            'attendance' => $attendance,
+                        ])
+                    @endforeach
 
                 </div>
             @else
