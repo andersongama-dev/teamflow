@@ -28,7 +28,7 @@
                     </div>
                 </div>
 
-                <div class="h-[350px]">
+                <div class="h-87.5">
                     <canvas id="systemChart"></canvas>
                 </div>
             </flux:card>
