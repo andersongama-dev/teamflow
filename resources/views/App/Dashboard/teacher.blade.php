@@ -71,7 +71,7 @@
 
                 </div>
 
-                <div class="h-[350px]">
+                <div class="h-87.5">
                     <canvas id="teacherChart"></canvas>
                 </div>
 
