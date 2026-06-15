@@ -73,7 +73,37 @@ class RolesAndPermissionsSeeder extends Seeder
             'name' => 'Aluno'
         ]);
 
-        $admin->syncPermissions(Permission::all());
+        $admin->syncPermissions([
+            'users.*',
+            'roles.*',
+
+            'students.*',
+            'teachers.*',
+
+            'subjects.*',
+            'classes.*',
+
+            'grades.view',
+            'grades.edit',
+            'grades.delete',
+
+            'attendances.view',
+            'attendances.edit',
+            'attendances.delete',
+
+            'history.view',
+
+            'profile.view',
+            'profile.edit',
+
+            'reports.view',
+            'reports.export',
+
+            'dashboard.admin',
+
+            'enrollments.view',
+            'enrollments.manage',
+        ]);
 
         $teacher->syncPermissions([
             'dashboard.teacher',
