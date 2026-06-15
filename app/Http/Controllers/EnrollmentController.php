@@ -32,7 +32,7 @@ class EnrollmentController extends Controller
                 });
             })
             ->latest()
-            ->paginate(10);
+            ->paginate(6);
 
         return view('App.Enrollments.index', [
             'enrollments' => $enrollments,
