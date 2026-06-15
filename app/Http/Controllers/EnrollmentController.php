@@ -34,7 +34,11 @@ class EnrollmentController extends Controller
             ->latest()
             ->paginate(10);
 
-        return view('App.Enrollments.index', compact('enrollments'));
+        return view('App.Enrollments.index', [
+            'enrollments' => $enrollments,
+            'classes' => SchoolClass::all(),
+            'students' => \App\Models\Student::with('user')->get(),
+        ]);
     }
 
     public function store(Request $request)
