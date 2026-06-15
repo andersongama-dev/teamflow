@@ -29,11 +29,13 @@ Route::post('/', function (Request $request) {
 
 Route::get('/sobre', fn () => view('about'));
 
-Route::get('/sign-up', fn () => view('Auth.signUp'));
-Route::get('/sign-in', fn () => view('Auth.signIn'))->name('login');
+Route::middleware('guest')->group(function () {
+    Route::get('/sign-up', fn () => view('Auth.signUp'));
+    Route::get('/sign-in', fn () => view('Auth.signIn'))->name('login');
 
-Route::post('/sign-up', [UserController::class, 'store']);
-Route::post('/sign-in', [UserController::class, 'login']);
+    Route::post('/sign-up', [UserController::class, 'store']);
+    Route::post('/sign-in', [UserController::class, 'login']);
+});
 
 /*
 |--------------------------------------------------------------------------
