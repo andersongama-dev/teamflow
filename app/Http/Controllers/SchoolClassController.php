@@ -11,47 +11,46 @@ class SchoolClassController extends Controller
 {
     public function index()
     {
-        $teacher = auth()->user()->teacher;
+        $user = auth()->user();
 
-        if (!$teacher) {
-            return view('App.SchoolClasses.index', [
-                'classes' => SchoolClass::whereRaw('1 = 0')->paginate(),
-                'subjects' => collect(),
-            ]);
-        }
+        abort_unless($user->hasAnyRole(['Administrador', 'Professor']), 403);
 
         $classes = SchoolClass::with([
                 'subject',
                 'teacher',
                 'teacher.user',
             ])
-            ->where('teacher_id', $teacher->id)
+            ->when($user->hasRole('Professor'), function ($query) use ($user) {
+                $query->where('teacher_id', $user->teacher?->id);
+            })
             ->latest()
-            ->paginate(10);
+            ->paginate(8);
 
-        $subjects = Subject::where('teacher_id', $teacher->id)->get();
+        $subjects = Subject::when($user->hasRole('Professor'), function ($query) use ($user) {
+                $query->where('teacher_id', $user->teacher?->id);
+            })
+            ->get();
 
         return view('App.SchoolClasses.index', compact('classes', 'subjects'));
     }
 
     public function create()
     {
-        $teacher = auth()->user()->teacher;
+        $user = auth()->user();
 
-        if (!$teacher) {
-            abort(403);
-        }
+        abort_unless($user->hasRole('Professor'), 403);
 
         return view('App.SchoolClasses.create', [
-            'subjects' => Subject::where('teacher_id', $teacher->id)->get(),
+            'subjects' => Subject::where('teacher_id', $user->teacher->id)->get(),
         ]);
     }
 
     public function store(Request $request)
     {
-        abort_unless(auth()->user()->hasAnyRole(['Administrador', 'Professor']), 403);
+        $user = auth()->user();
 
-        $teacher = auth()->user()->teacher;
+        abort_unless($user->hasRole('Professor'), 403);
+        abort_if(!$user->teacher, 403);
 
         $validated = $request->validate([
             'subject_id' => ['required', 'exists:subjects,id'],
@@ -61,18 +60,23 @@ class SchoolClassController extends Controller
             'room' => ['nullable', 'string', 'max:50'],
         ]);
 
-        $validated['teacher_id'] = $teacher?->id;
+        $validated['teacher_id'] = $user->teacher->id;
 
         SchoolClass::create($validated);
 
         return redirect()->route('classes.index');
     }
 
-    public function update(Request $request, SchoolClass $schoolClass)
+    public function update(Request $request, SchoolClass $class)
     {
-        $teacher = auth()->user()->teacher;
+        $user = auth()->user();
 
-        if (!$teacher || $schoolClass->teacher_id !== $teacher->id) {
+        abort_unless($user->hasAnyRole(['Administrador', 'Professor']), 403);
+
+        if (
+            $user->hasRole('Professor') &&
+            $class->teacher_id !== $user->teacher?->id
+        ) {
             abort(403);
         }
 
@@ -84,25 +88,23 @@ class SchoolClassController extends Controller
             'room' => ['nullable', 'string', 'max:50'],
         ]);
 
-        $validated['teacher_id'] = $teacher->id;
+        $class->update($validated);
 
-        $schoolClass->update($validated);
-
-        return redirect()
-            ->route('classes.index')
-            ->with('success', 'Class updated successfully.');
+        return redirect()->route('classes.index');
     }
 
     public function destroy(SchoolClass $class)
     {
-
         $user = auth()->user();
 
-        abort_unless(
-            $user->hasRole('Administrador') ||
-            ($user->hasRole('Professor') && $class->teacher_id === $user->teacher?->id),
-            403
-        );
+        abort_unless($user->hasAnyRole(['Administrador', 'Professor']), 403);
+
+        if (
+            $user->hasRole('Professor') &&
+            $class->teacher_id !== $user->teacher?->id
+        ) {
+            abort(403);
+        }
 
         $class->delete();
 
