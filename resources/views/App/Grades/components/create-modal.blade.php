@@ -1,4 +1,4 @@
-<flux:modal name="create-grade" class="md:w-[600px]">
+<flux:modal name="create-grade" class="md:w-150w">
     <div class="space-y-6">
 
         <div>

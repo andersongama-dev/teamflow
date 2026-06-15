@@ -1,6 +1,6 @@
 @props(['grade'])
 
-<flux:modal name="edit-grade-{{ $grade->id }}" class="md:w-[600px]">
+<flux:modal name="edit-grade-{{ $grade->id }}" class="md:w-150">
 
     <div class="space-y-6">
 
