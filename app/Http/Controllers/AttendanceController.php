@@ -54,7 +54,6 @@ class AttendanceController extends Controller
             'observation' => ['nullable', 'string'],
         ]);
 
-        // professor só pode lançar na própria turma
         if ($user->hasRole('Professor')) {
             $class = SchoolClass::findOrFail($validated['school_class_id']);
 
