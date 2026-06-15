@@ -19,8 +19,8 @@
 <body class="min-h-screen bg-white dark:bg-zinc-800 antialiased">
     <flux:sidebar sticky collapsible class="bg-zinc-50 dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-700">
         <flux:sidebar.header>
-            <flux:sidebar.brand href="#" logo="https://fluxui.dev/img/demo/logo.png"
-                logo:dark="{{ asset('assets/logoTeamFlow.png') }}" name="TeamFlow" />
+            <flux:sidebar.brand href="#" logo="{{ asset('assets/logoTeamFlow.svg') }}"
+                logo:dark="{{ asset('assets/logoTeamFlow.svg') }}" name="TeamFlow" />
             <flux:sidebar.collapse
                 class="in-data-flux-sidebar-on-desktop:not-in-data-flux-sidebar-collapsed-desktop:-mr-2" />
         </flux:sidebar.header>
@@ -134,10 +134,11 @@
         <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
         <flux:spacer />
         <flux:dropdown position="top" align="start">
-            <flux:profile avatar="/img/demo/user.png" />
+            <flux:profile
+                avatar="https://4.bp.blogspot.com/-83HGO7a2KV4/U6yEBTghSeI/AAAAAAAB9Ys/dslH1eKaueY/s1600/fernandinho.jpg" />
             <flux:menu>
                 <flux:menu.radio.group>
-                    <flux:menu.radio checked>Fernandinho</flux:menu.radio>
+                    <flux:menu.radio checked>{{ auth()->user()->name }}</flux:menu.radio>
                     <flux:menu.radio>Professor do TeamFlow</flux:menu.radio>
                 </flux:menu.radio.group>
                 <flux:menu.separator />
