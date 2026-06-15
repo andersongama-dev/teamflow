@@ -95,14 +95,6 @@
             </flux:sidebar.item>
         @endcan
 
-        @can('users.*')
-            <flux:sidebar.item icon="users" href="/users" :current="request()->is('users*')">
-
-                Usuários
-
-            </flux:sidebar.item>
-        @endcan
-
         <flux:sidebar.spacer />
         <flux:sidebar.nav>
             <flux:sidebar.item icon="cog-6-tooth" href="#">Settings</flux:sidebar.item>
