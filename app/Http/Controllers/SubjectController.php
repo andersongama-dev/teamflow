@@ -2,75 +2,89 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Attendance;
-use App\Models\Enrollment;
-use App\Models\Grade;
-use App\Models\SchoolClass;
-use App\Models\Student;
+use App\Http\Controllers\Controller;
 use App\Models\Subject;
 use App\Models\Teacher;
+use Illuminate\Http\Request;
 
-class DashboardController extends Controller
+class SubjectController extends Controller
 {
-    public function admin()
+    public function index()
     {
         $user = auth()->user();
 
-        abort_unless($user->hasRole('Administrador'), 403);
+        abort_unless($user->hasAnyRole(['Administrador', 'Professor']), 403);
 
-        return view('App.Dashboard.admin', [
-            'students' => Student::count(),
-            'teachers' => Teacher::count(),
-            'subjects' => Subject::count(),
-            'classes' => SchoolClass::count(),
-            'enrollments' => Enrollment::count(),
-            'grades' => Grade::count(),
-            'attendances' => Attendance::count(),
-        ]);
+        $subjects = Subject::with(['teacher', 'teacher.user'])
+            ->when($user->hasRole('Professor'), function ($query) use ($user) {
+                $query->where('teacher_id', $user->teacher->id);
+            })
+            ->latest()
+            ->paginate(6);
+
+        return view('App.Subjects.index', compact('subjects'));
     }
 
-    public function teacher()
+    public function store(Request $request)
     {
         $user = auth()->user();
 
         abort_unless($user->hasRole('Professor'), 403);
 
-        $teacherId = $user->teacher?->id;
-
-        return view('App.Dashboard.teacher', [
-            'subjects' => Subject::where('teacher_id', $teacherId)->count(),
-
-            'classes' => SchoolClass::where('teacher_id', $teacherId)->count(),
-
-            'enrollments' => Enrollment::whereHas('schoolClass', function ($query) use ($teacherId) {
-                $query->where('teacher_id', $teacherId);
-            })->count(),
-
-            'grades' => Grade::where('teacher_id', $teacherId)->count(),
-
-            'attendances' => Attendance::whereHas('schoolClass', function ($query) use ($teacherId) {
-                $query->where('teacher_id', $teacherId);
-            })->count(),
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'code' => ['required', 'string', 'max:50', 'unique:subjects,code'],
+            'workload_hours' => ['required', 'integer', 'min:1'],
+            'description' => ['nullable', 'string'],
         ]);
+
+        $validated['teacher_id'] = $user->teacher->id;
+
+        Subject::create($validated);
+
+        return redirect()->route('subjects.index');
     }
 
-    public function student()
+    public function update(Request $request, Subject $subject)
     {
         $user = auth()->user();
 
-        abort_unless($user->hasRole('Aluno'), 403);
+        abort_unless($user->hasAnyRole(['Administrador', 'Professor']), 403);
 
-        $studentId = $user->student?->id;
+        if (
+            $user->hasRole('Professor') &&
+            $subject->teacher_id !== $user->teacher->id
+        ) {
+            abort(403);
+        }
 
-        return view('App.Dashboard.student', [
-            'enrollments' => Enrollment::where('student_id', $studentId)->count(),
-
-            'grades' => Grade::where('student_id', $studentId)->count(),
-
-            'attendances' => Attendance::where('student_id', $studentId)->count(),
-
-            'averageGrade' => Grade::where('student_id', $studentId)
-                ->avg('grade'),
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'code' => ['required', 'string', 'max:50', 'unique:subjects,code,' . $subject->id],
+            'workload_hours' => ['required', 'integer', 'min:1'],
+            'description' => ['nullable', 'string'],
         ]);
+
+        $subject->update($validated);
+
+        return redirect()->route('subjects.index');
+    }
+
+    public function destroy(Subject $subject)
+    {
+        $user = auth()->user();
+
+        abort_unless($user->hasAnyRole(['Administrador', 'Professor']), 403);
+
+        if (
+            $user->hasRole('Professor') &&
+            $subject->teacher_id !== $user->teacher->id
+        ) {
+            abort(403);
+        }
+
+        $subject->delete();
+
+        return redirect()->route('subjects.index');
     }
 }
