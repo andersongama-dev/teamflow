@@ -97,14 +97,6 @@
             </flux:sidebar.item>
         @endcan
 
-        @can('reports.view')
-            <flux:sidebar.item icon="document-text" href="/reports" :current="request()->is('reports*')">
-
-                Relatórios
-
-            </flux:sidebar.item>
-        @endcan
-
         @can('users.*')
             <flux:sidebar.item icon="users" href="/users" :current="request()->is('users*')">
 
