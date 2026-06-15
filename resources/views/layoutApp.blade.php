@@ -16,6 +16,8 @@
     <link rel="icon" type="image/png" href="{{ asset('assets/logoTeamFlow.svg') }}">
 
     @fluxAppearance
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body class="min-h-screen bg-white dark:bg-zinc-800 antialiased">
