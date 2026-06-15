@@ -49,7 +49,7 @@
             </flux:sidebar.item>
         @endcan
 
-        @can('subjects.*')
+        @can('subjects.view')
             <flux:sidebar.item icon="book-open" href="/subjects" :current="request()->is('subjects*')">
 
                 Matérias
