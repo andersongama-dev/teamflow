@@ -111,6 +111,8 @@ class RolesAndPermissionsSeeder extends Seeder
             'enrollments.view',
             'enrollments.create',
             'enrollments.delete',
+
+            'grades.view',
         ]);
     }
 }
