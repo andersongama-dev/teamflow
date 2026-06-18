@@ -126,7 +126,7 @@ SchoolClasses
 Clone o projeto:
 
 ```bash
-git clone <url-do-repositorio>
+git clone https://github.com/andersongama-dev/teamflow.git
 ```
 
 Acesse a pasta:
