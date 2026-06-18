@@ -1,6 +1,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-# TeamFlow
+
+# <img width="32" height="32" alt="image" src="https://github.com/user-attachments/assets/9d1859b6-87f1-49a6-9cd7-2ee5066231ec" /> TeamFlow
 
 Sistema de Gestão Escolar desenvolvido com Laravel 12 como projeto acadêmico da disciplina de PWIII.
 
@@ -14,7 +15,7 @@ O objetivo do projeto foi ir além do escopo inicial proposto em sala de aula, i
 
 - PHP 8+
 - Laravel 12
-- MySQL
+- PostgreSQL
 - Tailwind CSS
 - Flux UI
 - Chart.js
@@ -126,7 +127,7 @@ SchoolClasses
 Clone o projeto:
 
 ```bash
-git clone <url-do-repositorio>
+git clone https://github.com/andersongama-dev/teamflow.git
 ```
 
 Acesse a pasta:
