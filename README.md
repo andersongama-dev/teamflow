@@ -15,7 +15,7 @@ O objetivo do projeto foi ir além do escopo inicial proposto em sala de aula, i
 
 - PHP 8+
 - Laravel 12
-- MySQL
+- PostgreSQL
 - Tailwind CSS
 - Flux UI
 - Chart.js
