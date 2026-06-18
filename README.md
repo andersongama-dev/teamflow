@@ -1,6 +1,6 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-# TeamFlow
+# TeamFlow <img width="42" height="43" alt="image" src="https://github.com/user-attachments/assets/a8728228-9c2d-4e4d-86f5-abc916957f29" />
 
 Sistema de Gestão Escolar desenvolvido com Laravel 12 como projeto acadêmico da disciplina de PWIII.
 
